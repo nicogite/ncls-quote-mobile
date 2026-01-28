@@ -1,0 +1,15 @@
+[build]
+  # Commande pour builder l'application
+  command = "npm run build"
+  
+  # Dossier contenant les fichiers buildés à déployer
+  publish = "dist"
+  
+  # Version de Node.js à utiliser
+  environment = { NODE_VERSION = "20" }
+
+# Redirection pour le routage côté client (Vue Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
