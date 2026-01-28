@@ -1,0 +1,7 @@
+{
+  "name": "the-quote-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
