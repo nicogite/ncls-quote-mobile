@@ -21,7 +21,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: 'contact', component: () => import('@/views/ContactView.vue')  },
       { path: 'cgu', component: () => import('@/views/CguView.vue')  },
       { path: 'notation', component: () => import('@/views/NotationView.vue')  },
-      { path: 'history', component: () => import('@/views/HistoryView.vue')  }
+      { path: 'history', component: () => import('@/views/HistoryView.vue')  },
+      { path: 'params', component: () => import('@/views/ParamsView.vue')  }
     ]
   }
 ]

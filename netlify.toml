@@ -3,7 +3,7 @@
   command = "npm run build"
   
   # Dossier contenant les fichiers buildés à déployer
-  publish = "dist"
+  publish = "/dist"
   
   # Version de Node.js à utiliser
   environment = { NODE_VERSION = "20" }

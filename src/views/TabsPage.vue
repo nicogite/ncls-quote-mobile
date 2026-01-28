@@ -1,5 +1,5 @@
 <template>
-  <ion-menu content-id="main-content" ref="menu">
+  <ion-menu content-id="main-content" ref="menuLink">
     <ion-header>
       <ion-toolbar>
         <ion-title>Menu</ion-title>
@@ -26,13 +26,13 @@
         </ion-tab-button>
 
         <ion-tab-button tab="tab2" href="/tabs/history">
-          <ion-icon aria-hidden="true" :icon="ellipse" />
+          <ion-icon aria-hidden="true" :icon="menu" />
           <ion-label>Mon historique</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="tab3" href="/tabs/settings">
-          <ion-icon aria-hidden="true" :icon="square" />
-          <ion-label>Paramètres</ion-label>
+        <ion-tab-button tab="tab3" href="/tabs/params">
+          <ion-icon aria-hidden="true" :icon="notifications" />
+          <ion-label>Notifications</ion-label>
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
@@ -41,23 +41,23 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonNavLink, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { ellipse, notifications, square, triangle, menu } from 'ionicons/icons';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 
 
 // const conceptComponent = markRaw(concept);
-const menu = ref();
+const menuLink = ref();
 const router = useRouter();
 
 function goToConcept() {
-  menu.value.toggle()
+  menuLink.value.toggle()
   router.push('/tabs/concept')
 }
 
 function goToLegal() {
-  menu.value.toggle()
+  menuLink.value.toggle()
   router.push('/tabs/cgu')
 }
 </script>
@@ -75,7 +75,7 @@ function goToLegal() {
   padding: 10px;
   border-radius: 5px;
   transition: background-color 0.2s;
-  font-size:1.15rem
+  font-size:1.15rem;
 }
 
 .menu-item:hover {

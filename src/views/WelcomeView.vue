@@ -116,6 +116,11 @@ onMounted(() => {
   margin-bottom: 2rem;
   line-height: 1.8;
   font-size:1.15rem;
+  
+}
+
+.stagger-wrapper {
+  font-style:italic;
 }
 
 .stagger-wrapper :deep(p) {
@@ -127,6 +132,7 @@ onMounted(() => {
   animation-timing-function: ease;
   animation-delay: calc(var(--stagger-index, 0) * 0.3s);
   margin-bottom: 1rem;
+  
 }
 
 .quote-button {
@@ -160,10 +166,10 @@ onMounted(() => {
 
 .reveal-quote-button {
   margin-top: 3rem;
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   text-align: center;
   cursor: pointer;
-  color: var(--ion-color-medium-shade);
+  color: #fff;
   font-weight: bold;
 }
 </style>
