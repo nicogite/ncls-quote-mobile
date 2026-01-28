@@ -73,7 +73,6 @@ npm run lint
 - Sauvegarde des notes sur le serveur
 
 ### 🔧 Actions
-- **Copier**: Copie la citation dans le presse-papier
 - **J'aime**: Navigation vers la page de notation
 - **Partager**: Partage natif iOS/Android (SMS, WhatsApp, Email, etc.)
 
