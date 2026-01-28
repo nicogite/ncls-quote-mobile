@@ -9,7 +9,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding">
+    <ion-content class="ion-padding params-page">
       <ion-list>
         <!-- Toggle pour activer/désactiver les notifications -->
         <ion-item>
@@ -102,24 +102,22 @@ ion-label.disabled {
 }
 
 .list-md {
-  background:none;
+  background: none;
 }
 
 .item.md {
-  --background: none;
-}
-
-ion-item {
-  --inner-border-width: 0px;
-}
-
-ion-item .item .sc-ion-label-md-h {
-  font-size: 1.15rem;
+  background: none;
 }
 
 ion-label {
   font-size: 1.15rem;
 }
+</style>
 
-
+<style>
+/* Styles non-scoped pour les variables CSS Ionic */
+.params-page ion-item {
+  --inner-border-width: 0px;
+  --background: transparent;
+}
 </style>
