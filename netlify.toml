@@ -1,6 +1,7 @@
 [build]
   # Commande pour builder l'application
-  command = "npm run build"
+  # command = "npm run build"
+  command = "ionic serve"
   
   # Dossier contenant les fichiers buildés à déployer
   publish = "dist"
