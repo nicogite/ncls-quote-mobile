@@ -7,12 +7,16 @@
     </ion-header>
     <ion-content class="ion-padding">
       <div class="menu-links">
-        <ion-nav-link @click="goToConcept" class="menu-item">
-          Le concept
-        </ion-nav-link> 
-        <ion-nav-link @click="goToLegal" class="menu-item">
-          Mentions légales
-        </ion-nav-link>
+        <ion-menu-toggle>
+          <ion-nav-link @click="goToConcept" class="menu-item">
+            Le concept
+          </ion-nav-link>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-nav-link @click="goToLegal" class="menu-item">
+            Mentions légales
+          </ion-nav-link>
+        </ion-menu-toggle>
       </div>
     </ion-content>
   </ion-menu>
@@ -21,7 +25,8 @@
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="tab1" href="/tabs/welcome">
-          <ion-icon aria-hidden="true" :icon="triangle" />
+          <ion-icon aria-hidden="true" :icon="bulbOutline" />
+          <!--img src="/img/quote-icon-white.svg" alt="Logo" style="width: 22px; height: 22px;" /-->
           <ion-label>Ma citation</ion-label>
         </ion-tab-button>
 
@@ -40,24 +45,39 @@
 </template>
 
 <script setup lang="ts">
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonNavLink, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { ellipse, notifications, square, triangle, menu } from 'ionicons/icons';
-import { ref } from 'vue';
+import {
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
+  IonLabel,
+  IonIcon,
+  IonNavLink,
+  IonPage,
+  IonRouterOutlet,
+  IonMenu,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonMenuToggle
+} from '@ionic/vue';
+import { notifications, bulbOutline, menu } from 'ionicons/icons';
+//import { useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 
 
 // const conceptComponent = markRaw(concept);
-const menuLink = ref();
+// const menuLink = useTemplateRef('menuLink');
 const router = useRouter();
 
 function goToConcept() {
-  menuLink.value.toggle()
+  //menuLink.value?.toggle()
   router.push('/tabs/concept')
 }
 
 function goToLegal() {
-  menuLink.value.toggle()
+  //menuLink.value?.toggle()
   router.push('/tabs/cgu')
 }
 </script>

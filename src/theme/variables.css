@@ -3,7 +3,7 @@ http://ionicframework.com/docs/theming/ */
 
 /* .md for Material Design (Android) */ 
 
-:root.md {
+:root.md, :root.ios {
 	--ion-background-color: #F2EDEA;
 	--ion-background-color-rgb: 242,237,234;
 

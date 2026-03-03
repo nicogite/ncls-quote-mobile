@@ -48,7 +48,7 @@
             />
           </div>
         </ion-fab-button>
-        <ion-fab-button  class="ion-margin-bottom quote-action-button">
+        <ion-fab-button  class="ion-margin-bottom quote-action-button" @click="shareQuote">
           <ion-icon :icon="shareSocial" size="large" />
         </ion-fab-button>
       </ion-fab>
@@ -64,8 +64,11 @@ import {
   IonTitle,
   IonContent,
   IonSpinner,
-  IonButton,
+  IonButtons,
+  IonMenuButton,
   IonIcon,
+  IonFab,
+  IonFabButton,
   toastController
 } from '@ionic/vue'
 import { star, starOutline, copyOutline, shareSocial } from 'ionicons/icons'

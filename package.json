@@ -12,14 +12,15 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@capacitor/android": "8.0.2",
     "@capacitor/app": "8.0.0",
     "@capacitor/clipboard": "^8.0.0",
-    "@capacitor/core": "8.0.0",
+    "@capacitor/core": "^8.1.0",
     "@capacitor/haptics": "8.0.0",
     "@capacitor/ios": "^8.0.2",
     "@capacitor/keyboard": "8.0.0",
     "@capacitor/preferences": "^8.0.0",
-    "@capacitor/share": "^8.0.0",
+    "@capacitor/share": "^8.0.1",
     "@capacitor/status-bar": "8.0.0",
     "@ionic/vue": "^8.0.0",
     "@ionic/vue-router": "^8.0.0",

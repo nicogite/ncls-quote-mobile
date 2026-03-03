@@ -28,8 +28,8 @@
         <!-- Message si vide -->
         <div v-else-if="history.length === 0" class="empty-state">
           <ion-icon :icon="bookOutline" size="large" />
-          <h2>Aucune citation notée</h2>
-          <p>Commencez à noter des citations pour construire votre historique !</p>
+          <h2>Aucune citation</h2>
+          <p>Commencez à découvrir des citations pour construire votre historique !</p>
           <ion-button router-link="/tabs/quote" expand="block">
             Découvrir une citation
           </ion-button>
@@ -37,7 +37,7 @@
 
         <!-- Liste des citations -->
         <div v-else>
-          <p class="history-count">{{ history.length }} citation{{ history.length > 1 ? 's' : '' }} notée{{ history.length > 1 ? 's' : '' }}</p>
+          <p class="history-count">{{ history.length }} citation{{ history.length > 1 ? 's' : '' }}</p>
           
           <ion-card v-for="item in history" :key="item.quote_id" class="quote-card">
             <ion-card-content>
