@@ -156,7 +156,7 @@ async function setRating(starValue: number) {
 async function shareQuote() {
   try {
     await Share.share({
-      title: 'Citation du jour',
+      title: 'Ma citation du jour',
       text: `"${quote.value}" - ${author.value}`,
       dialogTitle: 'Partager cette citation'
     })

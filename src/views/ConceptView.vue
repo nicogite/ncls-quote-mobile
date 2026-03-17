@@ -35,7 +35,9 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonSpinner
+  IonSpinner,
+  IonButtons,
+  IonMenuButton,
 } from '@ionic/vue'
 import { ref, onMounted } from 'vue'
 import axios from '@/services/api'

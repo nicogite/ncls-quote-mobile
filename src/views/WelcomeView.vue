@@ -57,7 +57,8 @@ import {
   IonToolbar, 
   IonTitle, 
   IonContent,
-  IonButton,
+  IonButtons,
+  IonMenuButton,
   IonSpinner
 } from '@ionic/vue'
 import { ref, onMounted } from 'vue'

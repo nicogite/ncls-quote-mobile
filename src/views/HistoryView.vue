@@ -79,12 +79,14 @@ import {
   IonCard,
   IonCardContent,
   IonButton,
+  IonMenuButton,
   IonIcon,
   alertController,
-  toastController
+  toastController,
+  onIonViewWillEnter
 } from '@ionic/vue'
 import { star, starOutline, trashOutline, bookOutline } from 'ionicons/icons'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService'
 
@@ -200,7 +202,7 @@ async function deleteHistoryItem(item: HistoryItem) {
   }
 }
 
-onMounted(() => {
+onIonViewWillEnter(() => {
   loadHistory()
 })
 </script>

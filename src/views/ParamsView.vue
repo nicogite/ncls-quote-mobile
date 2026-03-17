@@ -66,7 +66,7 @@ import {
 import { ref, watch } from 'vue';
 
 // État des notifications
-const notificationsEnabled = ref(false);
+const notificationsEnabled = ref(true);
 const notificationFrequency = ref<'daily' | 'weekly' | 'monthly'>('daily');
 
 // Charger les préférences sauvegardées (à implémenter avec Capacitor Preferences)
