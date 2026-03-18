@@ -22,6 +22,9 @@
         <div v-if="loading" class="text-center">
           <ion-spinner name="crescent" />
         </div>
+        <div v-else-if="error" class="text-error">
+          {{ error }}
+        </div>
         <div v-else class="content" v-html="conceptContent"></div>
       </div>
     </ion-content>
@@ -40,37 +43,24 @@ import {
   IonMenuButton,
 } from '@ionic/vue'
 import { ref, onMounted } from 'vue'
-import axios from '@/services/api'
+import { ensureContentLoaded, getContentValue, contentState } from '@/services/contentService'
 
 const loading = ref(true)
 const conceptContent = ref('')
 const error = ref('')
 
 onMounted(async () => {
-  /*try {
-    const response = await axios.get('/api/content/concept')
-    if (response.status === 200 && response.data.content) {
-      console.log(response.data.content.value)
-      concept.value = response.data.content.value
-    }
-  } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
-  }*/
-  console.log('get concept content');
   loading.value = true
   error.value = ''
   try {
-    const response = await axios.get('/api/content/concept')
-    console.log('Response data:', response.data);
-    if (response.status === 200 && response.data.value) {
-      conceptContent.value = response.data.value
-      console.log('Concept content set:', conceptContent.value);
+    await ensureContentLoaded()
+    conceptContent.value = getContentValue('concept')
+    if (!conceptContent.value) {
+      error.value = 'Impossible de charger le contenu du concept'
     }
   } catch (err) {
     console.error('Error loading concept content:', err)
-    error.value = 'Impossible de charger le contenu du concept'
+    error.value = contentState.contentLoadError.value || 'Impossible de charger le contenu du concept'
   } finally {
     loading.value = false
   }
@@ -81,6 +71,13 @@ onMounted(async () => {
 .text-center {
   text-align: center;
   padding: 2rem;
+}
+
+.text-error {
+  color: #d32f2f;
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 8px;
 }
 
 .content {

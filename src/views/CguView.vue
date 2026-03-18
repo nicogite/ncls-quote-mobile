@@ -22,6 +22,9 @@
         <div v-if="loading" class="text-center">
           <ion-spinner name="crescent" />
         </div>
+        <div v-else-if="error" class="text-error">
+          {{ error }}
+        </div>
         <div v-else v-html="cgu" class="content"></div>
       </div>
     </ion-content>
@@ -40,34 +43,22 @@ import {
   IonMenuButton,
 } from '@ionic/vue'
 import { ref, onMounted } from 'vue'
-import axios from '@/services/api'
+import { ensureContentLoaded, getContentValue, contentState } from '@/services/contentService'
 
 const loading = ref(true)
 const cgu = ref('')
 const error = ref('')
 
 onMounted(async () => {
-  /*try {
-    const response = await axios.get('/api/content/cgu')
-    if (response.status === 200 && response.data.content) {
-      cgu.value = response.data.content.value
-      console.log('cgu value', cgu.value)
-    }
-  } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
-  }*/
   try {
-    const response = await axios.get('/api/content/cgu')
-    console.log('Response data:', response.data);
-    if (response.status === 200 && response.data.value) {
-      cgu.value = response.data.value
-      console.log('Concept content set:', cgu.value);
+    await ensureContentLoaded()
+    cgu.value = getContentValue('cgu')
+    if (!cgu.value) {
+      error.value = 'Impossible de charger les mentions légales'
     }
   } catch (err) {
     console.error('Error loading concept content:', err)
-    error.value = 'Impossible de charger le contenu du concept'
+    error.value = contentState.contentLoadError.value || 'Impossible de charger les mentions légales'
   } finally {
     loading.value = false
   }
@@ -78,6 +69,13 @@ onMounted(async () => {
 .text-center {
   text-align: center;
   padding: 2rem;
+}
+
+.text-error {
+  color: #d32f2f;
+  padding: 1rem;
+  background-color: #ffebee;
+  border-radius: 8px;
 }
 
 .content {

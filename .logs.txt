@@ -1,0 +1,21 @@
+✔ Copying web assets from dist to android/app/src/main/assets/public in 10.69ms
+✔ Creating capacitor.config.json in android/app/src/main/assets in 477.10μs
+[info] Inlining sourcemaps
+✔ copy android in 27.39ms
+✔ Updating Android plugins in 2.72ms
+[info] Found 7 Capacitor plugins for android:
+       @capacitor/app@8.0.0
+       @capacitor/clipboard@8.0.0
+       @capacitor/haptics@8.0.0
+       @capacitor/keyboard@8.0.0
+       @capacitor/preferences@8.0.0
+       @capacitor/share@8.0.1
+       @capacitor/status-bar@8.0.0
+[warn] @capacitor/core@8.1.0 version doesn't match @capacitor/android@8.0.2 version.
+       Consider updating to a matching version, e.g. w/ npm install @capacitor/core@8.0.2
+✔ update android in 32.55ms
+[?25l[36m?[39m [1mPlease choose a target device:[22m [90m›[39m [90m- Use arrow-keys. Return to submit.[39m
+[36m❯[39m   [36m[4mPixel_3a_API_34_extension_level_7_x86_64 (emulator) (Pixel_3a_API_34_extension_level_7_x86_64)[39m[24m[90m[39m
+    Pixel 4 XL API 28 (emulator) (Pixel_4_XL_API_28)[90m[39m
+[2K[1G[31m✖[39m [1mPlease choose a target device:[22m [90m›[39m Pixel_3a_API_34_extension_level_7_x86_64 (emulator) (Pixel_3a_API_34_extension_level_7_x86_64)
+[?25h

@@ -63,9 +63,9 @@ import {
   onIonViewWillEnter
 } from '@ionic/vue'
 import { ref } from 'vue'
-import axios from '@/services/api'
 import { useRouter } from 'vue-router'
 import { Preferences } from '@capacitor/preferences'
+import { ensureContentLoaded, getContentValue, contentState } from '@/services/contentService'
 
 const router = useRouter()
 const welcomeContent = ref('')
@@ -90,19 +90,17 @@ async function redirectToQuoteIfAlreadyViewedToday() {
 }
 
 async function loadWelcomeContent() {
-  console.log('loadWelcomeContent called');
   loading.value = true
   error.value = ''
   try {
-    const response = await axios.get('/api/content/welcome')
-    console.log('Response data:', response.data);
-    if (response.status === 200 && response.data.value) {
-      welcomeContent.value = response.data.value
-      console.log('Welcome content set:', welcomeContent.value);
+    await ensureContentLoaded()
+    welcomeContent.value = getContentValue('welcome')
+    if (!welcomeContent.value) {
+      error.value = 'Impossible de charger le contenu de bienvenue'
     }
   } catch (err) {
     console.error('Error loading welcome content:', err)
-    error.value = 'Impossible de charger le contenu de bienvenue'
+    error.value = contentState.contentLoadError.value || 'Impossible de charger le contenu de bienvenue'
   } finally {
     loading.value = false
   }
