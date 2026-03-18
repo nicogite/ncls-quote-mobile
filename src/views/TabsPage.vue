@@ -17,6 +17,11 @@
             Mentions légales
           </ion-nav-link>
         </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-nav-link @click="clearLastQuoteView" class="menu-item">
+            Vider le local storage
+          </ion-nav-link>
+        </ion-menu-toggle>
       </div>
     </ion-content>
   </ion-menu>
@@ -64,6 +69,7 @@ import {
 import { notifications, bulbOutline, menu } from 'ionicons/icons';
 //import { useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
+import { Preferences } from '@capacitor/preferences';
 
 
 
@@ -79,6 +85,10 @@ function goToConcept() {
 function goToLegal() {
   //menuLink.value?.toggle()
   router.push('/tabs/cgu')
+}
+
+async function clearLastQuoteView() {
+  await Preferences.remove({ key: 'last_quote_view' })
 }
 </script>
 

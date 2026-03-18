@@ -59,16 +59,35 @@ import {
   IonContent,
   IonButtons,
   IonMenuButton,
-  IonSpinner
+  IonSpinner,
+  onIonViewWillEnter
 } from '@ionic/vue'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import axios from '@/services/api'
 import { useRouter } from 'vue-router'
+import { Preferences } from '@capacitor/preferences'
 
 const router = useRouter()
 const welcomeContent = ref('')
 const loading = ref(false)
 const error = ref('')
+
+function getTodayFormatted(): string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
+}
+
+async function redirectToQuoteIfAlreadyViewedToday() {
+  const { value } = await Preferences.get({ key: 'last_quote_view' })
+  if (value === getTodayFormatted()) {
+    setTimeout(() => router.replace('/tabs/quote'), 0)
+    return true
+  }
+  return false
+}
 
 async function loadWelcomeContent() {
   console.log('loadWelcomeContent called');
@@ -99,8 +118,11 @@ function handleClick() {
   }
 }
 
-onMounted(() => {
-  loadWelcomeContent()
+onIonViewWillEnter(async () => {
+  const hasBeenRedirected = await redirectToQuoteIfAlreadyViewedToday()
+  if (!hasBeenRedirected) {
+    loadWelcomeContent()
+  }
 })
 </script>
 

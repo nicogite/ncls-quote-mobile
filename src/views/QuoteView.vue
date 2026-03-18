@@ -26,7 +26,7 @@
         </div>
 
         <!-- Citation -->
-        <div v-else class="quote-container">
+        <div class="quote-container" :class="{ ready: isQuoteReady }">
           <div class="quote-text">{{ quote }}</div>
           <div class="quote-author">— {{ author }}</div>
         </div>
@@ -78,6 +78,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService';
+import { Preferences } from '@capacitor/preferences';
 
 const router = useRouter()
 const loading = ref(true)
@@ -87,6 +88,15 @@ const author = ref('')
 const quotationRated = ref(false)
 const rating = ref(0)
 const hoverRating = ref(0)
+const isQuoteReady = ref(false)
+
+function getTodayFormatted(): string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}/${month}/${day}`
+}
 
 async function copyToClipboard() {
   try {
@@ -182,6 +192,7 @@ onMounted(async () => {
       quoteId.value = response.data.id
       quote.value = response.data.text
       author.value = response.data.author || 'Inconnu'
+      
     } else {
       quote.value = "Le hasard c'est Dieu qui se balade incognito"
       author.value = 'Albert Einstein'
@@ -191,7 +202,15 @@ onMounted(async () => {
     quote.value = "Le hasard c'est Dieu qui se balade incognito"
     author.value = 'Albert Einstein'
   } finally {
-    loading.value = false
+    setTimeout(async () => {
+      loading.value = false
+      isQuoteReady.value = true
+      await Preferences.set({
+        key: 'last_quote_view',
+        value: getTodayFormatted()
+      })
+    }, 1500);
+    
   }
 })
 </script>
@@ -201,11 +220,19 @@ onMounted(async () => {
   max-width: 600px;
   margin: 2rem auto;
   text-align: center;
+  opacity: 0;
+  transition: opacity 2s ease-out;
+  padding:20px;
+}
+
+.quote-container.ready{
+  opacity: 1;
 }
 
 .quote-text {
   font-size: 1.5rem;
   font-style: italic;
+  font-family: garamond, serif;
   line-height: 1.8;
   margin: 2rem 0;
   color: var(--ion-text-color);
@@ -216,7 +243,7 @@ onMounted(async () => {
   font-size: 1.2rem;
   text-align: right;
   /*color: var(--ion-color-medium);*/
-  color: var(--ion-color-medium-shade);
+  color: var(--ion-text-color-step-250);
 }
 
 .quote-action-button {
@@ -235,57 +262,6 @@ ion-fab-button.rating {
   height: 56px;
   --border-radius: 28px;
 }
-
-
-
-
-
-/*.action-buttons {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-.action-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-}*/
-
-/*.action-button:active {
-  transform: scale(0.95);
-}*/
-
-/*.action-button ion-icon {
-  width: 60px;
-  height: 60px;
-  padding: 15px;
-  border-radius: 50%;
-  background-color: var(--ion-color-light);
-  color: var(--ion-color-primary);
-  transition: all 0.3s ease;
-}
-
-.action-button:hover ion-icon {
-  background-color: var(--ion-color-primary);
-  color: white;
-}
-
-.action-button ion-icon.liked {
-  color: #FFD700;
-  background-color: #FFF8DC;
-}
-
-.action-button span {
-  font-size: 0.9rem;
-  color: var(--ion-color-medium);
-}*/
 
 .rating-section {
   margin-top: 3rem;

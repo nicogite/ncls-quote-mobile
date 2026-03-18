@@ -9,17 +9,14 @@
     </ion-content>
   </ion-page>
 </template>
-<script>
+<script setup lang="ts">
 import { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import { IonPage } from '@ionic/vue';
+import { IonContent, IonPage } from '@ionic/vue';
 
 import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/keyboard';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import 'swiper/css/zoom';
 import '@ionic/vue/css/ionic-swiper.css';
 
 const modules = [Autoplay, Keyboard, Pagination, Scrollbar, Zoom];
