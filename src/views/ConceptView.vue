@@ -86,4 +86,8 @@ onMounted(async () => {
   margin: 0 auto;
   text-align: justify;
 }
+
+.content hr {
+  border-top: 1px solid #999;
+}
 </style>

@@ -67,7 +67,6 @@ import {
   IonMenuToggle
 } from '@ionic/vue';
 import { notifications, bulbOutline, menu } from 'ionicons/icons';
-//import { useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { Preferences } from '@capacitor/preferences';
 

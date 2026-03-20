@@ -43,7 +43,8 @@ onMounted(async () => {
 }
 
 ion-app ion-content {
-  --background: url('/img/water-ripples.jpg');
+  /*--background: url('/img/water-ripples.jpg');*/
+  --background: url('/img/bgd-paper.jpg') center/cover no-repeat;
   background-size: cover;
   /*--background:none;*/
 }

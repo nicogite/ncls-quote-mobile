@@ -27,8 +27,16 @@
 
         <!-- Citation -->
         <div class="quote-container" :class="{ ready: isQuoteReady }">
-          <div class="quote-text">{{ quote }}</div>
-          <div class="quote-author">— {{ author }}</div>
+          <div class="quote-date">{{ currentDateFrench }}</div>
+          <div class="quote-text">
+            “{{ quote }}”
+          </div>
+          <div class="quote-author">
+            — {{ author }}
+            <a v-if="wiki_link" :href="wiki_link" target="_blank" rel="noopener noreferrer">
+              <img src="/img/Wiki.png" alt="Wikipedia" class="wiki-icon" />
+            </a>
+          </div>
         </div>
       </div>
       
@@ -74,7 +82,7 @@ import {
 import { star, starOutline, copyOutline, shareSocial } from 'ionicons/icons'
 import { Clipboard } from '@capacitor/clipboard'
 import { Share } from '@capacitor/share'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService';
@@ -85,10 +93,24 @@ const loading = ref(true)
 const quote = ref('')
 const quoteId = ref('')
 const author = ref('')
+const wiki_link = ref('')
 const quotationRated = ref(false)
 const rating = ref(0)
 const hoverRating = ref(0)
 const isQuoteReady = ref(false)
+
+const currentDateFrench = computed(() => {
+  const now = new Date()
+  const days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
+  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+  
+  const dayName = days[now.getDay()]
+  const day = now.getDate()
+  const monthName = months[now.getMonth()]
+  const year = now.getFullYear()
+  
+  return `${dayName} ${day} ${monthName} ${year}`
+})
 
 function getTodayFormatted(): string {
   const now = new Date()
@@ -192,6 +214,7 @@ onMounted(async () => {
       quoteId.value = response.data.id
       quote.value = response.data.text
       author.value = response.data.author || 'Inconnu'
+      wiki_link.value = response.data.wiki_link || ''
       
     } else {
       quote.value = "Le hasard c'est Dieu qui se balade incognito"
@@ -229,6 +252,13 @@ onMounted(async () => {
   opacity: 1;
 }
 
+.quote-date {
+  font-size: 1rem;
+  color: var(--ion-text-color-step-250);
+  margin-bottom: 1.5rem;
+  text-transform: lowercase;
+}
+
 .quote-text {
   font-size: 1.5rem;
   font-style: italic;
@@ -236,6 +266,27 @@ onMounted(async () => {
   line-height: 1.8;
   margin: 2rem 0;
   color: var(--ion-text-color);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.quote-icon-left,
+.quote-icon-right {
+  width: 30px;
+  height: 30px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.quote-icon-left {
+  margin-top: -5px;
+}
+
+.quote-icon-right {
+  align-self: flex-end;
+  margin-bottom: -5px;
 }
 
 .quote-author {
@@ -244,6 +295,18 @@ onMounted(async () => {
   text-align: right;
   /*color: var(--ion-color-medium);*/
   color: var(--ion-text-color-step-250);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.wiki-icon {
+  width: 27px;
+  height: 27px;
+  vertical-align: middle;
+  border: 1px solid #000;
+  border-radius: 15%;
 }
 
 .quote-action-button {
