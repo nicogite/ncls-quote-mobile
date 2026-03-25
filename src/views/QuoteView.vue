@@ -27,7 +27,7 @@
 
         <!-- Citation -->
         <div class="quote-container" :class="{ ready: isQuoteReady }">
-          <div class="quote-date">{{ currentDateFrench }}</div>
+          <div class="quote-date">Citation générée pour vous le {{ currentDateFrench }}</div>
           <div class="quote-text">
             “{{ quote }}”
           </div>
@@ -36,6 +36,13 @@
             <a v-if="wiki_link" :href="wiki_link" target="_blank" rel="noopener noreferrer">
               <img src="/img/Wiki.png" alt="Wikipedia" class="wiki-icon" />
             </a>
+          </div>
+          <div class="quote-comment" :class="{ visible: isCommentVisible }">
+            Prenez un moment pour méditer sur votre citation.<br><br>
+            Si elle vous parle, n’hésitez pas à la noter.<br><br>
+            Vous pouvez aussi la partager avec un de vos proches qu’elle peut concerner ou la copier.<br><br>
+            Et vous la retrouverez aussi dans votre Historique.<br><br>
+
           </div>
         </div>
       </div>
@@ -98,6 +105,7 @@ const quotationRated = ref(false)
 const rating = ref(0)
 const hoverRating = ref(0)
 const isQuoteReady = ref(false)
+const isCommentVisible = ref(false)
 
 const currentDateFrench = computed(() => {
   const now = new Date()
@@ -108,8 +116,11 @@ const currentDateFrench = computed(() => {
   const day = now.getDate()
   const monthName = months[now.getMonth()]
   const year = now.getFullYear()
+  const hour = now.getHours()
+  const minute = now.getMinutes()
+  const second = now.getSeconds()
   
-  return `${dayName} ${day} ${monthName} ${year}`
+  return `${dayName} ${day} ${monthName} ${year}, à ${hour.toString().padStart(2, '0')}h ${minute.toString().padStart(2, '0')}m ${second.toString().padStart(2, '0')}s`
 })
 
 function getTodayFormatted(): string {
@@ -232,6 +243,10 @@ onMounted(async () => {
         key: 'last_quote_view',
         value: getTodayFormatted()
       })
+      // Afficher le commentaire 5 secondes après la citation
+      setTimeout(() => {
+        isCommentVisible.value = true
+      }, 5000)
     }, 1500);
     
   }
@@ -256,7 +271,7 @@ onMounted(async () => {
   font-size: 1rem;
   color: var(--ion-text-color-step-250);
   margin-bottom: 1.5rem;
-  text-transform: lowercase;
+  /*text-transform: lowercase;*/
 }
 
 .quote-text {
@@ -270,6 +285,19 @@ onMounted(async () => {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
+}
+
+.quote-comment {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: var(--ion-text-color-step-250);
+  text-align: left;
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+
+.quote-comment.visible {
+  opacity: 1;
 }
 
 .quote-icon-left,
