@@ -19,7 +19,12 @@
         </ion-menu-toggle>
         <ion-menu-toggle>
           <ion-nav-link @click="clearLastQuoteView" class="menu-item">
-            Vider le local storage
+            Simuler première citation
+          </ion-nav-link>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-nav-link @click="clearFirstLaunch" class="menu-item">
+            Simuler premier lancement
           </ion-nav-link>
         </ion-menu-toggle>
       </div>
@@ -88,6 +93,10 @@ function goToLegal() {
 
 async function clearLastQuoteView() {
   await Preferences.remove({ key: 'last_quote_view' })
+}
+
+async function clearFirstLaunch() {
+  await Preferences.remove({ key: 'first_launch' })
 }
 </script>
 

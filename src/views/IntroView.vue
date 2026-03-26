@@ -9,6 +9,9 @@
         :pagination="paginationConfig"
         :watchSlidesProgress="true"
         :scrollbar="scrollbarConfig"
+        :effect="'fade'"
+        :fadeEffect="fadeOptions"
+        :spaceBetween="300"
       >
         <swiper-slide>
           <div class="ion-padding">
@@ -37,7 +40,7 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { Keyboard, Pagination, Scrollbar, Navigation } from 'swiper/modules';
+import { EffectFade, Keyboard, Pagination, Scrollbar, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { IonContent, IonPage, onIonViewWillEnter, useIonRouter } from '@ionic/vue'; 
 import { ref } from 'vue';
@@ -47,10 +50,11 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
+import 'swiper/css/effect-fade';
 import '@ionic/vue/css/ionic-swiper.css';
 
 const ionRouter = useIonRouter();
-const modules = [Keyboard, Pagination, Navigation, Scrollbar];
+const modules = [EffectFade, Keyboard, Pagination, Navigation, Scrollbar];
 const slide1Content = ref('');
 const slide2Content = ref('');
 const slide3Content = ref('');
@@ -63,6 +67,10 @@ const paginationConfig = {
   enabled: true,
 };
 
+const fadeOptions = {
+  crossFade: true,
+};
+
 const scrollbarConfig = {
   hide: false,
   draggable: true,
@@ -71,7 +79,7 @@ const scrollbarConfig = {
 console.log('IntroView component setup, initializing content refs and modules.');
 
 const handleClick = () => {
-  ionRouter.push('/tabs/quote', 'root', 'replace');
+  ionRouter.push('/tabs/quote');
 };
 
 onIonViewWillEnter(async () => {

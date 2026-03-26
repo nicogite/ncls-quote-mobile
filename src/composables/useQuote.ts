@@ -8,6 +8,7 @@ export interface Quote {
   rating?: number
   created_at?: string
   wiki_link?: string
+  viewed_at?: string
 }
 
 // État partagé entre les composants

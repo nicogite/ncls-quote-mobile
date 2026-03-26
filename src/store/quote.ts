@@ -9,6 +9,7 @@ export interface Quote {
   rating?: number
   created_at?: string
   wiki_link?: string
+  viewed_at?: string
 }
 
 export const useQuoteStore = defineStore('quote', () => {

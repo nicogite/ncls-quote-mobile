@@ -86,21 +86,23 @@ import {
   IonFabButton,
   toastController
 } from '@ionic/vue'
-import { star, starOutline, copyOutline, shareSocial } from 'ionicons/icons'
-import { Clipboard } from '@capacitor/clipboard'
+import { star, starOutline, shareSocial } from 'ionicons/icons'
 import { Share } from '@capacitor/share'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService';
 import { Preferences } from '@capacitor/preferences';
+import { useQuoteStore } from '@/store/quote';
 
 const router = useRouter()
+const quoteStore = useQuoteStore()
 const loading = ref(true)
 const quote = ref('')
 const quoteId = ref('')
 const author = ref('')
 const wiki_link = ref('')
+const viewedAt = ref<Date | null>(null)
 const quotationRated = ref(false)
 const rating = ref(0)
 const hoverRating = ref(0)
@@ -108,17 +110,17 @@ const isQuoteReady = ref(false)
 const isCommentVisible = ref(false)
 
 const currentDateFrench = computed(() => {
-  const now = new Date()
+  const dateToFormat = viewedAt.value || new Date()
   const days = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
   const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
   
-  const dayName = days[now.getDay()]
-  const day = now.getDate()
-  const monthName = months[now.getMonth()]
-  const year = now.getFullYear()
-  const hour = now.getHours()
-  const minute = now.getMinutes()
-  const second = now.getSeconds()
+  const dayName = days[dateToFormat.getDay()]
+  const day = dateToFormat.getDate()
+  const monthName = months[dateToFormat.getMonth()]
+  const year = dateToFormat.getFullYear()
+  const hour = dateToFormat.getHours()
+  const minute = dateToFormat.getMinutes()
+  const second = dateToFormat.getSeconds()
   
   return `${dayName} ${day} ${monthName} ${year}, à ${hour.toString().padStart(2, '0')}h ${minute.toString().padStart(2, '0')}m ${second.toString().padStart(2, '0')}s`
 })
@@ -129,28 +131,6 @@ function getTodayFormatted(): string {
   const month = String(now.getMonth() + 1).padStart(2, '0')
   const day = String(now.getDate()).padStart(2, '0')
   return `${year}/${month}/${day}`
-}
-
-async function copyToClipboard() {
-  try {
-    await Clipboard.write({
-      string: `"${quote.value}" - ${author.value}`
-    })
-    const toast = await toastController.create({
-      message: 'Citation copiée dans le presse-papier !',
-      duration: 2000,
-      position: 'bottom',
-      color: 'success'
-    })
-    await toast.present()
-  } catch (error) {
-    console.error('Erreur lors de la copie:', error)
-  }
-}
-
-function redirectToLike() {
-  // Navigation vers la page de notation
-  router.push('/tabs/notation')
 }
 
 function toggleLike() {
@@ -210,26 +190,50 @@ async function shareQuote() {
 
 onMounted(async () => {
   try {
-    const geo = 'FR'
-    console.log('Get devide Id...');
-    const deviceId = await initializeUser();
-    console.log('deviceId', deviceId);
-    const response = await axios.get('/api/quoteoftheday',
-    {
-      params: {
-        geolocalisation: geo,
-        deviceId: deviceId }
-    })
-    console.log('Quote of the day response:', response)
-    if (response.status === 200 && response.data.text) {
-      quoteId.value = response.data.id
-      quote.value = response.data.text
-      author.value = response.data.author || 'Inconnu'
-      wiki_link.value = response.data.wiki_link || ''
-      
+    // Vérifier si la citation est déjà dans le store
+    if (quoteStore.currentQuote.id !== null && quoteStore.currentQuote.text) {
+      console.log('Using quote from store:', quoteStore.currentQuote);
+      quoteId.value = String(quoteStore.currentQuote.id)
+      quote.value = quoteStore.currentQuote.text
+      author.value = quoteStore.currentQuote.author
+      wiki_link.value = quoteStore.currentQuote.wiki_link || ''
+      if (quoteStore.currentQuote.viewed_at) {
+        viewedAt.value = new Date(quoteStore.currentQuote.viewed_at)
+      }
     } else {
-      quote.value = "Le hasard c'est Dieu qui se balade incognito"
-      author.value = 'Albert Einstein'
+      // Récupérer la citation depuis le serveur
+      const geo = 'FR'
+      console.log('Get device Id...');
+      const deviceId = await initializeUser();
+      console.log('deviceId', deviceId);
+      const response = await axios.get('/api/quoteoftheday',
+      {
+        params: {
+          geolocalisation: geo,
+          deviceId: deviceId }
+      })
+      console.log('Quote of the day response:', response)
+      if (response.status === 200 && response.data.text) {
+        quoteId.value = response.data.id
+        quote.value = response.data.text
+        author.value = response.data.author || 'Inconnu'
+        wiki_link.value = response.data.wiki_link || ''
+        if (response.data.viewed_at) {
+          viewedAt.value = new Date(response.data.viewed_at)
+        }
+        
+        // Sauvegarder dans le store
+        quoteStore.setQuote({
+          id: response.data.id,
+          text: response.data.text,
+          author: response.data.author || 'Inconnu',
+          wiki_link: response.data.wiki_link || '',
+          viewed_at: response.data.viewed_at
+        })
+      } else {
+        quote.value = "Le hasard c'est Dieu qui se balade incognito"
+        author.value = 'Albert Einstein'
+      }
     }
   } catch (e) {
     console.log(e)

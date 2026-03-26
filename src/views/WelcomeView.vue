@@ -64,30 +64,12 @@ import {
 } from '@ionic/vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Preferences } from '@capacitor/preferences'
 import { ensureContentLoaded, getContentValue, contentState } from '@/services/contentService'
 
 const router = useRouter()
 const welcomeContent = ref('')
 const loading = ref(false)
 const error = ref('')
-
-function getTodayFormatted(): string {
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
-  const day = String(now.getDate()).padStart(2, '0')
-  return `${year}/${month}/${day}`
-}
-
-async function redirectToQuoteIfAlreadyViewedToday() {
-  const { value } = await Preferences.get({ key: 'last_quote_view' })
-  if (value === getTodayFormatted()) {
-    setTimeout(() => router.replace('/tabs/quote'), 0)
-    return true
-  }
-  return false
-}
 
 async function loadWelcomeContent() {
   loading.value = true
@@ -117,10 +99,7 @@ function handleClick() {
 }
 
 onIonViewWillEnter(async () => {
-  const hasBeenRedirected = await redirectToQuoteIfAlreadyViewedToday()
-  if (!hasBeenRedirected) {
-    loadWelcomeContent()
-  }
+  loadWelcomeContent()
 })
 </script>
 
