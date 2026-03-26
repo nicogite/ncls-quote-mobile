@@ -9,6 +9,10 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/tabs/welcome'
   },
   {
+    path: '/intro',
+    component: () => import('@/views/IntroView.vue')
+  },
+  {
     path: '/tabs/',
     component: TabsPage,
     children: [

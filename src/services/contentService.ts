@@ -35,7 +35,7 @@ export async function loadAllContent(force = false): Promise<Record<string, stri
         accumulator[item.key] = item.value
         return accumulator
       }, {})
-
+      console.log('next map:', nextMap);
       contentMap.value = nextMap
       isContentLoaded.value = true
 
