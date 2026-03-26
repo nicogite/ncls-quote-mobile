@@ -27,7 +27,7 @@
 
         <!-- Citation -->
         <div class="quote-container" :class="{ ready: isQuoteReady }">
-          <div class="quote-date">Citation générée pour vous le {{ currentDateFrench }}</div>
+          <div class="quote-date">Citation générée pour <b>vous</b> le {{ currentDateFrench }}</div>
           <div class="quote-text">
             “{{ quote }}”
           </div>

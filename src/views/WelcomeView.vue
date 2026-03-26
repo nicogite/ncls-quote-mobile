@@ -113,9 +113,18 @@ onIonViewWillEnter(async () => {
 }
 
 .welcome-content {
-  margin-bottom: 2rem;
+  font-size: 1.3rem;
+  font-style: italic;
+  font-family: garamond, serif;
+  text-align:center;
   line-height: 1.8;
-  font-size:1.15rem;
+  margin: 2rem 0;
+  color: var(--ion-text-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   
 }
 
