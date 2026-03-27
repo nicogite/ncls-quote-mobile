@@ -62,7 +62,7 @@
           <div class="ion-padding">
             <div class="slide-container">
               <div class="slide-text" v-html="slide3Content"></div>
-              <div class="reveal-quote-button" @click="handleClick">Découvrez votre citation</div>
+              <ion-button class="reveal-quote-button" @click="handleClick">Votre citation du jour</ion-button>
             </div>
           </div>
         </div>
@@ -289,11 +289,12 @@ onIonViewWillEnter(async () => {
 
 .reveal-quote-button {
   margin-top: 3rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-align: center;
   cursor: pointer;
   color: #fff;
   font-weight: bold;
+  --background: #1c8e99;
 }
 
 /* Pagination dots */

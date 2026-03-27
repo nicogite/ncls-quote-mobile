@@ -277,6 +277,7 @@ onMounted(async () => {
 .quote-container {
   max-width: 600px;
   margin: 2rem auto;
+  margin-top:0rem;
   text-align: center;
   opacity: 0;
   transition: opacity 2s ease-out;
@@ -300,6 +301,7 @@ onMounted(async () => {
   font-family: garamond, serif;
   line-height: 1.8;
   margin: 2rem 0;
+  margin-top:3rem;
   color: var(--ion-text-color);
   position: relative;
   display: flex;
@@ -308,10 +310,11 @@ onMounted(async () => {
 }
 
 .quote-comment {
-  margin-top: 1.5rem;
+  margin-top: 3rem;
   font-size: 1rem;
   color: var(--ion-text-color-step-250);
   text-align: left;
+  padding-left: 40px;
 }
 
 .quote-comment p {

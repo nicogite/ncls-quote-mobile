@@ -23,7 +23,7 @@
         <!-- Contenu chargé depuis la base de données -->
         <div v-if="welcomeContent" class="welcome-content">
           <div v-html="welcomeContent" class="stagger-wrapper" />
-          <div class="reveal-quote-button" @click="handleClick">Découvrez votre citation</div>
+          <ion-button class="reveal-quote-button" @click="handleClick">Découvrez votre citation</ion-button>
         </div>
         
         <!-- État de chargement -->
@@ -175,10 +175,12 @@ onIonViewWillEnter(async () => {
 
 .reveal-quote-button {
   margin-top: 3rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-align: center;
   cursor: pointer;
   color: #fff;
   font-weight: bold;
+  --background: #1c8e99;
+  font-style:normal;
 }
 </style>

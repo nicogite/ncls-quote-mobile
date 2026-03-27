@@ -18,13 +18,13 @@
           </ion-nav-link>
         </ion-menu-toggle>
         <ion-menu-toggle>
-          <ion-nav-link @click="simulateFirstQuoteOfTheDay" class="menu-item">
-            Simuler première citation
+          <ion-nav-link @click="simulateFirstLaunch" class="menu-item">
+            Simuler premier lancement
           </ion-nav-link>
         </ion-menu-toggle>
         <ion-menu-toggle>
-          <ion-nav-link @click="simulateFirstLaunch" class="menu-item">
-            Simuler premier lancement
+          <ion-nav-link @click="simulateFirstQuoteOfTheDay" class="menu-item">
+            Simuler première citation
           </ion-nav-link>
         </ion-menu-toggle>
         <ion-menu-toggle>
@@ -125,7 +125,7 @@ async function simulateNewReturn() {
     // Récupérer le device_uuid
     const { value: deviceId } = await Preferences.get({ key: 'user_uuid' });
     
-    if (deviceId) {
+    /*if (deviceId) {
       // Appeler l'API pour supprimer l'entrée de la date du jour
       await axios.delete('/api/today-quote-view', {
         params: { device_id: deviceId }
@@ -133,7 +133,7 @@ async function simulateNewReturn() {
     }
     
     // Supprimer la préférence locale
-    await Preferences.remove({ key: 'last_quote_view' });
+    await Preferences.remove({ key: 'last_quote_view' });*/
     
     // Rediriger
     window.location.href = import.meta.env.BASE_URL || '/';

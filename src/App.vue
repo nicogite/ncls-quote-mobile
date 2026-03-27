@@ -2,8 +2,8 @@
   <ion-app>
     <div v-if="isBootstrapping" class="app-splash-screen">
       <div class="app-splash-content">
-        <img src="/img/quote-icon-white.svg" alt="The Quote" class="app-splash-logo" />
-        <h1>Ma citation du jour</h1>
+        <img src="/img/MCDJ-Logo-2.png" class="app-splash-logo" />
+        <!--h1>Ma citation du jour</h1-->
         <p>Préparation de l’application...</p>
       </div>
     </div>
@@ -118,7 +118,8 @@ ion-app ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(29, 53, 87, 0.92) 0%, rgba(69, 123, 157, 0.9) 100%), url('/img/water-ripples.jpg') center/cover no-repeat;
+  /*background: linear-gradient(180deg, rgba(29, 53, 87, 0.92) 0%, rgba(69, 123, 157, 0.9) 100%), url('/img/paper-bgd-2.jpg') center/cover no-repeat;*/
+  background: url('/img/paper-bgd-2.jpg') center/cover no-repeat;
   z-index: 9999;
 }
 
@@ -129,12 +130,12 @@ ion-app ion-content {
   gap: 1rem;
   padding: 2rem;
   text-align: center;
-  color: #fff;
+  color: #252525;
 }
 
 .app-splash-logo {
-  width: 96px;
-  height: 96px;
+  width: 128px;
+  height: 128px;
   object-fit: contain;
 }
 
