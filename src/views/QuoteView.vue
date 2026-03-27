@@ -8,7 +8,7 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" @click="handleContentClick">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Ma citation du jour</ion-title>
@@ -37,17 +37,16 @@
               <img src="/img/Wiki.png" alt="Wikipedia" class="wiki-icon" />
             </a>
           </div>
-          <div class="quote-comment" :class="{ visible: isCommentVisible }">
-            Prenez un moment pour méditer sur votre citation.<br><br>
-            Si elle vous parle, n’hésitez pas à la noter.<br><br>
-            Vous pouvez aussi la partager avec un de vos proches qu’elle peut concerner ou la copier.<br><br>
-            Et vous la retrouverez aussi dans votre Historique.<br><br>
-
+          <div class="quote-comment">
+            <p :class="{ visible: visibleParagraphs[0] }">Prenez un moment pour méditer sur votre citation.</p>
+            <p :class="{ visible: visibleParagraphs[1] }">Si elle vous parle, n'hésitez pas à la noter.</p>
+            <p :class="{ visible: visibleParagraphs[2] }">Vous pouvez aussi la partager avec un de vos proches qu'elle peut concerner ou la copier.</p>
+            <p :class="{ visible: visibleParagraphs[3] }">Et vous la retrouverez aussi dans votre Historique.</p>
           </div>
         </div>
       </div>
       
-      <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab vertical="bottom" horizontal="start" slot="fixed" @click.stop>
         <ion-fab-button id="ratingButton" class="ion-margin-bottom quote-action-button" :class="{ rating: quotationRated }" @click="toggleLike">
           <ion-icon v-if="!quotationRated" :icon="starOutline" size="large" />
           <div class="stars" v-else>
@@ -107,7 +106,7 @@ const quotationRated = ref(false)
 const rating = ref(0)
 const hoverRating = ref(0)
 const isQuoteReady = ref(false)
-const isCommentVisible = ref(false)
+const visibleParagraphs = ref([false, false, false, false])
 
 const currentDateFrench = computed(() => {
   const dateToFormat = viewedAt.value || new Date()
@@ -135,6 +134,14 @@ function getTodayFormatted(): string {
 
 function toggleLike() {
   quotationRated.value = true
+}
+
+function handleContentClick() {
+  if (quotationRated.value) {
+    quotationRated.value = false
+    rating.value = 0
+    hoverRating.value = 0
+  }
 }
 
 async function setRating(starValue: number) {
@@ -247,9 +254,18 @@ onMounted(async () => {
         key: 'last_quote_view',
         value: getTodayFormatted()
       })
-      // Afficher le commentaire 5 secondes après la citation
+      // Afficher les paragraphes un par un avec 2000ms d'intervalle
       setTimeout(() => {
-        isCommentVisible.value = true
+        visibleParagraphs.value[0] = true
+        setTimeout(() => {
+          visibleParagraphs.value[1] = true
+          setTimeout(() => {
+            visibleParagraphs.value[2] = true
+            setTimeout(() => {
+              visibleParagraphs.value[3] = true
+            }, 2000)
+          }, 2000)
+        }, 2000)
       }, 5000)
     }, 1500);
     
@@ -296,11 +312,16 @@ onMounted(async () => {
   font-size: 1rem;
   color: var(--ion-text-color-step-250);
   text-align: left;
-  opacity: 0;
-  transition: opacity 1.5s ease-in;
 }
 
-.quote-comment.visible {
+.quote-comment p {
+  opacity: 0;
+  transition: opacity 2s ease-in;
+  text-align: right;
+  font-style: italic;
+}
+
+.quote-comment p.visible {
   opacity: 1;
 }
 
