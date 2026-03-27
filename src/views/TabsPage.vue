@@ -123,7 +123,7 @@ async function simulateFirstQuoteOfTheDay() {
 async function simulateNewReturn() {
   try {
     // Récupérer le device_uuid
-    const { value: deviceId } = await Preferences.get({ key: 'user_uuid' });
+    // const { value: deviceId } = await Preferences.get({ key: 'user_uuid' });
     
     /*if (deviceId) {
       // Appeler l'API pour supprimer l'entrée de la date du jour

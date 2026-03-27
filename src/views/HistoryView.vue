@@ -30,7 +30,7 @@
           <ion-icon :icon="bookOutline" size="large" />
           <h2>Aucune citation</h2>
           <p>Commencez à découvrir des citations pour construire votre historique !</p>
-          <ion-button router-link="/tabs/quote" expand="block">
+          <ion-button class="reveal-quote-button" router-link="/tabs/quote" expand="block">
             Découvrir une citation
           </ion-button>
         </div>
@@ -103,23 +103,15 @@ const history = ref<HistoryItem[]>([])
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
-  const now = new Date()
-  const diffTime = Math.abs(now.getTime() - date.getTime())
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
   
-  if (diffDays === 0) {
-    return "Aujourd'hui"
-  } else if (diffDays === 1) {
-    return "Hier"
-  } else if (diffDays < 7) {
-    return `Il y a ${diffDays} jours`
-  } else {
-    return date.toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    })
-  }
+  const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' })
+  const day = date.getDate()
+  const month = date.toLocaleDateString('fr-FR', { month: 'short' })
+  const year = date.getFullYear()
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  
+  return `Vu le ${dayName} ${day} ${month} ${year} à ${hours}h${minutes}`
 }
 
 async function loadHistory() {
@@ -308,5 +300,16 @@ onIonViewWillEnter(() => {
 
 .delete-icon:active {
   transform: scale(0.95);
+}
+
+.reveal-quote-button {
+  margin-top: 3rem;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  --background: #1c8e99;
+  font-style:normal;
 }
 </style>

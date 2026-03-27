@@ -35,15 +35,6 @@
         <div v-else-if="error" class="text-error">
           {{ error }}
         </div>
-
-        <!-- Bouton toujours visible -->
-        <!-- ion-button 
-          expand="block" 
-          class="quote-button" 
-          @click="handleClick"
-        >
-          Découvrez votre citation
-        </ion-button -->
         
       </div>
     </ion-content>
