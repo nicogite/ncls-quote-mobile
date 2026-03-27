@@ -2,9 +2,7 @@
   <ion-app>
     <div v-if="isBootstrapping" class="app-splash-screen">
       <div class="app-splash-content">
-        <img src="/img/MCDJ-Logo-2.png" class="app-splash-logo" />
-        <!--h1>Ma citation du jour</h1-->
-        <p>Préparation de l’application...</p>
+        <img src="/img/Splash-screen.png" class="app-splash-logo" />
       </div>
     </div>
     <ion-router-outlet v-show="!isBootstrapping" />
@@ -25,6 +23,16 @@ const isBootstrapping = ref(true)
 const MIN_SPLASH_DURATION_MS = 3000
 const router = useRouter()
 
+// Précharger la texture de fond pour les autres pages
+function preloadTexture(): Promise<void> {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => resolve()
+    img.onerror = () => resolve() // Résoudre même en cas d'erreur pour ne pas bloquer l'app
+    img.src = '/img/paper-bgd-2.jpg'
+  })
+}
+
 function getTodayFormatted(): string {
   const now = new Date()
   const year = now.getFullYear()
@@ -39,6 +47,7 @@ onMounted(async () => {
     const [deviceId] = await Promise.all([
       initializeUser(),
       ensureContentLoaded(),
+      preloadTexture(),
       new Promise((resolve) => setTimeout(resolve, MIN_SPLASH_DURATION_MS))
     ])
     console.log('Device ID:', deviceId);
@@ -118,25 +127,23 @@ ion-app ion-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  /*background: linear-gradient(180deg, rgba(29, 53, 87, 0.92) 0%, rgba(69, 123, 157, 0.9) 100%), url('/img/paper-bgd-2.jpg') center/cover no-repeat;*/
-  background: url('/img/paper-bgd-2.jpg') center/cover no-repeat;
+  background: #000;
   z-index: 9999;
+  overflow: hidden;
 }
 
 .app-splash-content {
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 2rem;
-  text-align: center;
-  color: #252525;
+  justify-content: center;
 }
 
 .app-splash-logo {
-  width: 128px;
-  height: 128px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .app-splash-content h1 {
