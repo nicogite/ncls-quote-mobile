@@ -9,15 +9,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Le Concept</ion-title>
-          <ion-buttons slot="end">
-            <ion-menu-button></ion-menu-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
       <div class="ion-padding">
         <div v-if="loading" class="text-center">
           <ion-spinner name="crescent" />

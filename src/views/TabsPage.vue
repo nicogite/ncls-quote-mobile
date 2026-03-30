@@ -39,7 +39,7 @@
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button tab="tab1" href="/tabs/welcome">
+        <ion-tab-button tab="tab1" href="/tabs/quote" :selected="isOnQuoteOrWelcome">
           <ion-icon aria-hidden="true" :icon="bulbOutline" />
           <!--img src="/img/quote-icon-white.svg" alt="Logo" style="width: 22px; height: 22px;" /-->
           <ion-label>Ma citation</ion-label>
@@ -77,15 +77,21 @@ import {
   IonMenuToggle
 } from '@ionic/vue';
 import { notifications, bulbOutline, menu } from 'ionicons/icons';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { Preferences } from '@capacitor/preferences';
 import axios from '@/services/api';
+import { computed } from 'vue';
 
 
 
 // const conceptComponent = markRaw(concept);
 // const menuLink = useTemplateRef('menuLink');
 const router = useRouter();
+const route = useRoute();
+
+const isOnQuoteOrWelcome = computed(() => {
+  return route.path === '/tabs/welcome' || route.path === '/tabs/quote';
+});
 
 function goToConcept() {
   //menuLink.value?.toggle()

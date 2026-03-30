@@ -9,14 +9,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Ma citation du jour</ion-title>
-          <ion-buttons slot="end">
-            <ion-menu-button></ion-menu-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
 
       <div class="welcome-ctn ion-padding">
         
@@ -171,7 +163,7 @@ onIonViewWillEnter(async () => {
   cursor: pointer;
   color: #fff;
   font-weight: bold;
-  --background: #1c8e99;
+  --background: var(--ion-color-primary);
   font-style:normal;
 }
 </style>

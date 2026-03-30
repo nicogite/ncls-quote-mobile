@@ -9,15 +9,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true" @click="handleContentClick">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Ma citation du jour</ion-title>
-          <ion-buttons slot="end">
-            <ion-menu-button></ion-menu-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
       <div class="ion-padding">
         <!-- Chargement -->
         <div v-if="loading" class="text-center">

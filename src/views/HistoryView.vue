@@ -9,15 +9,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Historique</ion-title>
-          <ion-buttons slot="end">
-            <ion-menu-button></ion-menu-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-
       <div class="ion-padding">
         <!-- Chargement -->
         <div v-if="loading" class="text-center">
@@ -309,7 +300,7 @@ onIonViewWillEnter(() => {
   cursor: pointer;
   color: #fff;
   font-weight: bold;
-  --background: #1c8e99;
+  --background: var(--ion-color-primary);
   font-style:normal;
 }
 </style>

@@ -6,12 +6,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Écrivez nous !</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
       <div class="ion-padding">
         <form @submit.prevent="handleSubmit">
           <ion-item>

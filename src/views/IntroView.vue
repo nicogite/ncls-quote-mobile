@@ -294,7 +294,7 @@ onIonViewWillEnter(async () => {
   cursor: pointer;
   color: #fff;
   font-weight: bold;
-  --background: #1c8e99;
+  --background: var(--ion-color-primary);
 }
 
 /* Pagination dots */

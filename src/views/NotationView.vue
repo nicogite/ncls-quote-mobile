@@ -9,12 +9,6 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Notez cette citation</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
       <div class="ion-padding">
         <!-- Citation -->
         <div class="quote-container">

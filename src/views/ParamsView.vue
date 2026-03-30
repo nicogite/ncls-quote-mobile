@@ -27,18 +27,18 @@
           </ion-list-header>
 
           <ion-item :disabled="!notificationsEnabled">
-            <ion-label for="frequency">1 fois par jour</ion-label>
-            <ion-radio name="frequency" slot="start" value="daily" color="dark"></ion-radio>
+            <!--ion-label for="frequency">1 fois par jour</ion-label-->
+            <ion-radio name="frequency" slot="start" value="daily" color="dark" label-placement="end">1 fois par jour</ion-radio>
           </ion-item>
 
           <ion-item :disabled="!notificationsEnabled">
-            <ion-label for="frequency">1 fois par semaine</ion-label>
-            <ion-radio name="frequency" slot="start" value="weekly" color="dark"></ion-radio>
+            <!--ion-label for="frequency">1 fois par semaine</ion-label-->
+            <ion-radio name="frequency" slot="start" value="weekly" color="dark" label-placement="end">1 fois par semaine</ion-radio>
           </ion-item>
 
           <ion-item :disabled="!notificationsEnabled">
-            <ion-label for="frequency">1 fois par mois</ion-label>
-            <ion-radio name="frequency" slot="start" value="monthly" color="dark"></ion-radio>
+            <!--ion-label for="frequency">1 fois par mois</ion-label-->
+            <ion-radio name="frequency" slot="start" value="monthly" color="dark" label-placement="end">1 fois par mois</ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>
@@ -101,11 +101,11 @@ ion-label.disabled {
   /*color: var(--ion-color-medium);*/
 }
 
-.list-md {
+.list-md, .list-ios {
   background: none;
 }
 
-.item.md {
+.item.md, .item.ios {
   background: none;
 }
 
