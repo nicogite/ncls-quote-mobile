@@ -14,7 +14,7 @@
         <!-- Toggle pour activer/désactiver les notifications -->
         <ion-item>
           <ion-label>Notifications</ion-label>
-          <ion-toggle color="dark"
+          <ion-toggle color="primary"
             v-model="notificationsEnabled"
             @ionChange="onNotificationsToggle"
           ></ion-toggle>
@@ -28,17 +28,17 @@
 
           <ion-item :disabled="!notificationsEnabled">
             <!--ion-label for="frequency">1 fois par jour</ion-label-->
-            <ion-radio name="frequency" slot="start" value="daily" color="dark" label-placement="end">1 fois par jour</ion-radio>
+            <ion-radio name="frequency" slot="start" value="daily" color="primary" label-placement="end">1 fois par jour</ion-radio>
           </ion-item>
 
           <ion-item :disabled="!notificationsEnabled">
             <!--ion-label for="frequency">1 fois par semaine</ion-label-->
-            <ion-radio name="frequency" slot="start" value="weekly" color="dark" label-placement="end">1 fois par semaine</ion-radio>
+            <ion-radio name="frequency" slot="start" value="weekly" color="primary" label-placement="end">1 fois par semaine</ion-radio>
           </ion-item>
 
           <ion-item :disabled="!notificationsEnabled">
             <!--ion-label for="frequency">1 fois par mois</ion-label-->
-            <ion-radio name="frequency" slot="start" value="monthly" color="dark" label-placement="end">1 fois par mois</ion-radio>
+            <ion-radio name="frequency" slot="start" value="monthly" color="primary" label-placement="end">1 fois par mois</ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>
