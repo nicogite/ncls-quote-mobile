@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Ma citation du jour</ion-title>
+        <ion-title>Ma Citation du Jour</ion-title>
         <ion-buttons slot="end">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
@@ -18,7 +18,7 @@
 
         <!-- Citation -->
         <div class="quote-container" :class="{ ready: isQuoteReady }">
-          <div class="quote-date">Citation générée pour <b>vous</b> le {{ currentDateFrench }}</div>
+          <div class="quote-date">Citation générée <b>pour vous</b><br>{{ currentDateFrench }}</div>
           <div class="quote-text">
             “{{ quote }}”
           </div>
@@ -30,7 +30,7 @@
           </div>
           <div class="quote-comment">
             <p :class="{ visible: visibleParagraphs[0] }">Prenez un moment pour méditer sur votre citation.</p>
-            <p :class="{ visible: visibleParagraphs[1] }">Si elle vous parle, n'hésitez pas à la noter.</p>
+            <p :class="{ visible: visibleParagraphs[1] }">Si elle vous parle, n'hésitez pas à lui donner une note.</p>
             <p :class="{ visible: visibleParagraphs[2] }">Vous pouvez aussi la partager avec un de vos proches qu'elle peut concerner ou la copier.</p>
             <p :class="{ visible: visibleParagraphs[3] }">Et vous la retrouverez aussi dans votre Historique.</p>
           </div>
@@ -112,7 +112,7 @@ const currentDateFrench = computed(() => {
   const minute = dateToFormat.getMinutes()
   const second = dateToFormat.getSeconds()
   
-  return `${dayName} ${day} ${monthName} ${year}, à ${hour.toString().padStart(2, '0')}h ${minute.toString().padStart(2, '0')}m ${second.toString().padStart(2, '0')}s`
+  return `${dayName} ${day} ${monthName} ${year} à ${hour.toString().padStart(2, '0')}h ${minute.toString().padStart(2, '0')}m ${second.toString().padStart(2, '0')}s`
 })
 
 function getTodayFormatted(): string {

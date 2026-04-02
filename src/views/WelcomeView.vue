@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Ma citation du jour</ion-title>
+        <ion-title>Ma Citation du Jour</ion-title>
         <ion-buttons slot="end">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>

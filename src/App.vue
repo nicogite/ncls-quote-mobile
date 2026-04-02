@@ -20,7 +20,7 @@ import axios from '@/services/api';
 import { useQuoteStore } from '@/store/quote';
 
 const isBootstrapping = ref(true)
-const MIN_SPLASH_DURATION_MS = 3000
+const MIN_SPLASH_DURATION_MS = 5000
 const router = useRouter()
 
 // Précharger la texture de fond pour les autres pages

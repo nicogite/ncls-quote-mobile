@@ -127,26 +127,7 @@ async function simulateFirstQuoteOfTheDay() {
 }
 
 async function simulateNewReturn() {
-  try {
-    // Récupérer le device_uuid
-    // const { value: deviceId } = await Preferences.get({ key: 'user_uuid' });
-    
-    /*if (deviceId) {
-      // Appeler l'API pour supprimer l'entrée de la date du jour
-      await axios.delete('/api/today-quote-view', {
-        params: { device_id: deviceId }
-      });
-    }
-    
-    // Supprimer la préférence locale
-    await Preferences.remove({ key: 'last_quote_view' });*/
-    
-    // Rediriger
-    window.location.href = import.meta.env.BASE_URL || '/';
-  } catch (error) {
-    console.error('Error simulating new return:', error);
-    window.location.href = import.meta.env.BASE_URL || '/';
-  }
+  window.location.href = import.meta.env.BASE_URL || '/';
 }
 
 async function simulateFirstLaunch() {
@@ -164,6 +145,7 @@ async function simulateFirstLaunch() {
     // Supprimer les préférences locales
     await Preferences.remove({ key: 'first_launch' });
     await Preferences.remove({ key: 'last_quote_view' });
+    await Preferences.remove({ key: 'user_uuid' });
     
     // Rediriger
     window.location.href = import.meta.env.BASE_URL || '/';
