@@ -85,32 +85,53 @@ import {
   IonDatetimeButton,
   IonModal*/
 } from '@ionic/vue';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useNotifications } from '@/composables/useNotifications';
 
 // État des notifications
 const notificationsEnabled = ref(true);
 const notificationFrequency = ref<'daily' | 'weekly'>('daily');
 
-const { scheduleUserRhythm } = useNotifications();
+const { 
+  scheduleUserRhythm, 
+  saveNotificationSettings, 
+  getNotificationSettings, 
+  cancelNotifications 
+} = useNotifications();
 
-// Charger les préférences sauvegardées (à implémenter avec Capacitor Preferences)
-// TODO: Charger depuis le stockage local
+// Charger les préférences sauvegardées
+onMounted(async () => {
+  const settings = await getNotificationSettings();
+  if (settings) {
+    notificationsEnabled.value = settings.enabled;
+    notificationFrequency.value = settings.frequency;
+  }
+});
 
 // Gérer le changement du toggle des notifications
 const onNotificationsToggle = async () => {
-  // TODO: Sauvegarder la préférence
   console.log('Notifications enabled:', notificationsEnabled.value);
+  
+  await saveNotificationSettings({
+    enabled: notificationsEnabled.value,
+    frequency: notificationFrequency.value
+  });
+  
   if (notificationsEnabled.value) {
     await scheduleUserRhythm(notificationFrequency.value);
     console.log('Notification frequency:', notificationFrequency.value);
+  } else {
+    await cancelNotifications();
   }
 };
 
 // Observer les changements de fréquence
 watch(notificationFrequency, async (newValue) => {
   if (notificationsEnabled.value) {
-    // TODO: Sauvegarder la préférence
+    await saveNotificationSettings({
+      enabled: notificationsEnabled.value,
+      frequency: newValue
+    });
     await scheduleUserRhythm(newValue);
     console.log('Notification frequency:', newValue);
   }

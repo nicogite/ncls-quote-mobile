@@ -1,4 +1,12 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { Preferences } from '@capacitor/preferences';
+
+export interface NotificationSettings {
+  enabled: boolean;
+  frequency: 'daily' | 'weekly';
+}
+
+const NOTIFICATION_SETTINGS_KEY = 'notification_settings';
 
 export function useNotifications() {
   
@@ -54,5 +62,38 @@ export function useNotifications() {
     });
   };
 
-  return { scheduleUserRhythm };
+  const saveNotificationSettings = async (settings: NotificationSettings) => {
+    await Preferences.set({
+      key: NOTIFICATION_SETTINGS_KEY,
+      value: JSON.stringify(settings)
+    });
+  };
+
+  const getNotificationSettings = async (): Promise<NotificationSettings | null> => {
+    const { value } = await Preferences.get({ key: NOTIFICATION_SETTINGS_KEY });
+    if (value) {
+      return JSON.parse(value) as NotificationSettings;
+    }
+    return null;
+  };
+
+  const cancelNotifications = async () => {
+    await LocalNotifications.cancel({ notifications: [{ id: NOTIFICATION_ID }] });
+  };
+
+  const restoreNotifications = async () => {
+    const settings = await getNotificationSettings();
+    if (settings && settings.enabled) {
+      await scheduleUserRhythm(settings.frequency);
+    }
+    return settings;
+  };
+
+  return { 
+    scheduleUserRhythm,
+    saveNotificationSettings,
+    getNotificationSettings,
+    cancelNotifications,
+    restoreNotifications
+  };
 }
