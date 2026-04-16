@@ -30,7 +30,7 @@
             <!--ion-label for="frequency">1 fois par jour</ion-label-->
             <ion-radio name="frequency" slot="start" value="daily" color="primary" label-placement="end">1 fois par jour</ion-radio>
           </ion-item>
-          <p>A l'heure suivante :</p>
+          <!--p>A l'heure suivante :</p>
           <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
           <ion-modal :keep-contents-mounted="true">
@@ -39,13 +39,12 @@
               presentation="time"
               value="2023-11-02T01:22:00"
             ></ion-datetime>
-          </ion-modal>
+          </ion-modal-->
           <ion-item :disabled="!notificationsEnabled">
-            <!--ion-label for="frequency">1 fois par semaine</ion-label-->
             <ion-radio name="frequency" slot="start" value="weekly" color="primary" label-placement="end">Chaque semaine</ion-radio>
           </ion-item>
 
-          <div id="weekly-options" style="display: flex; flex-wrap: wrap; margin-left: 40px; margin-top: 10px;">
+          <!--div id="weekly-options" style="display: flex; flex-wrap: wrap; margin-left: 40px; margin-top: 10px;">
             <ion-button class="weekly-option">Lun</ion-button>
             <ion-button class="weekly-option">Mar</ion-button>
             <ion-button class="weekly-option">Mer</ion-button>
@@ -53,12 +52,11 @@
             <ion-button class="weekly-option">Ven</ion-button>
             <ion-button class="weekly-option">Sam</ion-button>
             <ion-button class="weekly-option">Dim</ion-button>
-          </div>
+          </div-->
 
-          <ion-item :disabled="!notificationsEnabled">
-            <!--ion-label for="frequency">1 fois par mois</ion-label-->
+          <!--ion-item :disabled="!notificationsEnabled">
             <ion-radio name="frequency" slot="start" value="monthly" color="primary" label-placement="end">1 fois par mois</ion-radio>
-          </ion-item>
+          </ion-item-->
 
           
         </ion-radio-group>
@@ -83,29 +81,37 @@ import {
   IonListHeader,
   IonButtons,
   IonBackButton,
-  IonDatetime, 
+  /*IonDatetime, 
   IonDatetimeButton,
-  IonModal
+  IonModal*/
 } from '@ionic/vue';
 import { ref, watch } from 'vue';
+import { useNotifications } from '@/composables/useNotifications';
 
 // État des notifications
 const notificationsEnabled = ref(true);
-const notificationFrequency = ref<'daily' | 'weekly' | 'monthly'>('daily');
+const notificationFrequency = ref<'daily' | 'weekly'>('daily');
+
+const { scheduleUserRhythm } = useNotifications();
 
 // Charger les préférences sauvegardées (à implémenter avec Capacitor Preferences)
 // TODO: Charger depuis le stockage local
 
 // Gérer le changement du toggle des notifications
-const onNotificationsToggle = () => {
+const onNotificationsToggle = async () => {
   // TODO: Sauvegarder la préférence
   console.log('Notifications enabled:', notificationsEnabled.value);
+  if (notificationsEnabled.value) {
+    await scheduleUserRhythm(notificationFrequency.value);
+    console.log('Notification frequency:', notificationFrequency.value);
+  }
 };
 
 // Observer les changements de fréquence
-watch(notificationFrequency, (newValue) => {
+watch(notificationFrequency, async (newValue) => {
   if (notificationsEnabled.value) {
     // TODO: Sauvegarder la préférence
+    await scheduleUserRhythm(newValue);
     console.log('Notification frequency:', newValue);
   }
 });
