@@ -16,7 +16,6 @@ const routes: Array<RouteRecordRaw> = [
       { path: 'welcome', component: () => import('@/views/WelcomeView.vue') },
       { path: 'quote', component: () => import('@/views/QuoteView.vue') },
       { path: 'a-demain', component: () => import('@/views/AdemainView.vue') },
-      { path: 'inscription', component: () => import('@/views/SubscriptionView.vue') },
       { path: 'concept', component: () => import('@/views/ConceptView.vue') },
       { path: 'contact', component: () => import('@/views/ContactView.vue')  },
       { path: 'cgu', component: () => import('@/views/CguView.vue')  },
