@@ -32,6 +32,11 @@
             Simuler un nouveau retour
           </ion-nav-link>
         </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-nav-link @click="testNotification" class="menu-item">
+            Test notification (5s)
+          </ion-nav-link>
+        </ion-menu-toggle>
       </div>
     </ion-content>
   </ion-menu>
@@ -81,6 +86,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { Preferences } from '@capacitor/preferences';
 import axios from '@/services/api';
 import { computed } from 'vue';
+import { useNotifications } from '@/composables/useNotifications';
 
 
 
@@ -88,6 +94,7 @@ import { computed } from 'vue';
 // const menuLink = useTemplateRef('menuLink');
 const router = useRouter();
 const route = useRoute();
+const { scheduleSimpleNotification } = useNotifications();
 
 const isOnQuoteOrWelcome = computed(() => {
   return route.path === '/tabs/welcome' || route.path === '/tabs/quote';
@@ -152,6 +159,15 @@ async function simulateFirstLaunch() {
   } catch (error) {
     console.error('Error simulating first launch:', error);
     window.location.href = import.meta.env.BASE_URL || '/';
+  }
+}
+
+async function testNotification() {
+  try {
+    await scheduleSimpleNotification();
+    console.log('Notification programmée pour dans 5 secondes');
+  } catch (error) {
+    console.error('Erreur lors du test de notification:', error);
   }
 }
 </script>
