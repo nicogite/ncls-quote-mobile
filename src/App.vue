@@ -52,7 +52,6 @@ onMounted(async () => {
       preloadTexture(),
       new Promise((resolve) => setTimeout(resolve, MIN_SPLASH_DURATION_MS))
     ])
-    console.log('Device ID:', deviceId);
 
     // Initialiser le listener de notifications pour la reprogrammation automatique
     initializeNotificationListener();
@@ -62,19 +61,15 @@ onMounted(async () => {
 
     // Vérifier si c'est le premier lancement
     const { value: firstLaunch } = await Preferences.get({ key: 'first_launch' });
-    console.log('First launch value from preferences:', firstLaunch);
     if (firstLaunch === null) {
       // Première visite : définir la variable et rediriger vers /intro
-      console.log('First launch detected, setting preference and redirecting to /intro');
       await Preferences.set({ key: 'first_launch', value: 'false' });
       router.push('/intro');
     } else {
       // Vérifier si la citation a déjà été vue aujourd'hui
-      console.log('Checking if quote has already been viewed today...');
       const { value: lastQuoteView } = await Preferences.get({ key: 'last_quote_view' })
       if (lastQuoteView === getTodayFormatted()) {
         // Citation déjà vue aujourd'hui : récupérer la citation et rediriger vers /tabs/quote
-        console.log('Quote has already been viewed today, fetching quote from server...');
         try {
           const response = await axios.get('/api/quoteoftheday', {
             params: {
@@ -90,7 +85,6 @@ onMounted(async () => {
               wiki_link: response.data.wiki_link || '',
               viewed_at: response.data.viewed_at
             })
-            console.log('Quote fetched successfully:', response.data);
           }
         } catch (error) {
           console.error('Error fetching quote:', error);
@@ -98,7 +92,6 @@ onMounted(async () => {
         router.push('/tabs/quote');
       } else {
         // Application déjà lancée, citation pas encore vue : rediriger vers /tabs/welcome
-        console.log('Not first launch, quote not viewed yet, redirecting to /tabs/welcome');
         router.push('/tabs/welcome');
       }
     }
@@ -111,22 +104,14 @@ onMounted(async () => {
 </script>
 
 <style>
-#app {
-  --background: url('/img/water-ripples.jpg');
-  /*background-size: cover;*/
-}
 
 ion-app ion-content {
-  /*--background: url('/img/water-ripples.jpg');*/
-  /*--background: url('/img/bgd-paper.jpg') center/cover no-repeat;*/
   --background: url('/img/paper-bgd-2.jpg') center/cover no-repeat;
   background-size: cover;
-  /*--background:none;*/
 }
 
 #background-content {
   --background: none;
-  /*background-size: cover;*/
 }
 
 .app-splash-screen {

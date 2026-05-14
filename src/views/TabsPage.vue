@@ -46,7 +46,6 @@
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="tab1" href="/tabs/quote" :selected="isOnQuoteOrWelcome">
           <ion-icon aria-hidden="true" :icon="bulbOutline" />
-          <!--img src="/img/quote-icon-white.svg" alt="Logo" style="width: 22px; height: 22px;" /-->
           <ion-label>Ma citation</ion-label>
         </ion-tab-button>
 
@@ -88,10 +87,6 @@ import axios from '@/services/api';
 import { computed } from 'vue';
 import { useNotifications } from '@/composables/useNotifications';
 
-
-
-// const conceptComponent = markRaw(concept);
-// const menuLink = useTemplateRef('menuLink');
 const router = useRouter();
 const route = useRoute();
 const { scheduleSimpleNotification } = useNotifications();
@@ -101,12 +96,10 @@ const isOnQuoteOrWelcome = computed(() => {
 });
 
 function goToConcept() {
-  //menuLink.value?.toggle()
   router.push('/tabs/intro')
 }
 
 function goToLegal() {
-  //menuLink.value?.toggle()
   router.push('/tabs/cgu')
 }
 
@@ -165,7 +158,6 @@ async function simulateFirstLaunch() {
 async function testNotification() {
   try {
     await scheduleSimpleNotification();
-    console.log('Notification programmée pour dans 5 secondes');
   } catch (error) {
     console.error('Erreur lors du test de notification:', error);
   }

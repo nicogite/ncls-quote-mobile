@@ -27,37 +27,12 @@
           </ion-list-header>
 
           <ion-item :disabled="!notificationsEnabled">
-            <!--ion-label for="frequency">1 fois par jour</ion-label-->
             <ion-radio name="frequency" slot="start" value="daily" color="primary" label-placement="end">1 fois par jour</ion-radio>
           </ion-item>
-          <!--p>A l'heure suivante :</p>
-          <ion-datetime-button datetime="datetime"></ion-datetime-button>
-
-          <ion-modal :keep-contents-mounted="true">
-            <ion-datetime
-              id="datetime"
-              presentation="time"
-              value="2023-11-02T01:22:00"
-            ></ion-datetime>
-          </ion-modal-->
+          
           <ion-item :disabled="!notificationsEnabled">
             <ion-radio name="frequency" slot="start" value="weekly" color="primary" label-placement="end">Chaque semaine</ion-radio>
           </ion-item>
-
-          <!--div id="weekly-options" style="display: flex; flex-wrap: wrap; margin-left: 40px; margin-top: 10px;">
-            <ion-button class="weekly-option">Lun</ion-button>
-            <ion-button class="weekly-option">Mar</ion-button>
-            <ion-button class="weekly-option">Mer</ion-button>
-            <ion-button class="weekly-option">Jeu</ion-button>
-            <ion-button class="weekly-option">Ven</ion-button>
-            <ion-button class="weekly-option">Sam</ion-button>
-            <ion-button class="weekly-option">Dim</ion-button>
-          </div-->
-
-          <!--ion-item :disabled="!notificationsEnabled">
-            <ion-radio name="frequency" slot="start" value="monthly" color="primary" label-placement="end">1 fois par mois</ion-radio>
-          </ion-item-->
-
           
         </ion-radio-group>
       </ion-list>
@@ -149,7 +124,6 @@ ion-list-header {
 
 ion-label.disabled {
   opacity: 0.5;
-  /*color: var(--ion-color-medium);*/
 }
 
 .list-md, .list-ios {
@@ -163,26 +137,6 @@ ion-label.disabled {
 ion-label {
   font-size: 1.15rem;
 }
-
-/*button.weekly-option {
-  padding-inline: 12px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  border-radius: 8px;
-  margin-inline: 2px;
-  margin-top: 0px;
-  margin-bottom: 5px;
-  position: relative;
-  transition: color 150ms ease-in-out;
-  border: medium;
-  background: var(--ion-color-step-300, var(--ion-background-color-step-300, #edeef0));
-  color: var(--ion-text-color, #000);
-  font-family: inherit;
-  font-size: 1rem;
-  cursor: pointer;
-  overflow: hidden;
-  appearance: none;
-}*/
 
 </style>
 

@@ -10,6 +10,7 @@ export interface Quote {
   created_at?: string
   wiki_link?: string
   viewed_at?: string
+  nb_quotes?: number
 }
 
 export const useQuoteStore = defineStore('quote', () => {

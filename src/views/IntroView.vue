@@ -97,8 +97,6 @@ const transitionPhase = ref<'fade-out' | 'fade-in' | null>(null);
 const nextSlideIndex = ref(-1);
 const isInitialLoad = ref(true);
 
-console.log('IntroView component setup, initializing content refs.');
-
 const shouldShowSlide = (index: number) => {
   if (!isTransitioning.value) {
     // Mode normal : afficher seulement la slide actuelle
@@ -201,11 +199,6 @@ onIonViewWillEnter(async () => {
   slide1Content.value = getContentValue('intro_1');
   slide2Content.value = getContentValue('intro_2');
   slide3Content.value = getContentValue('intro_3');
-  console.log("Loaded content for slides:", {
-    slide1: slide1Content.value,
-    slide2: slide2Content.value,
-    slide3: slide3Content.value
-  });
 });
 </script>
 

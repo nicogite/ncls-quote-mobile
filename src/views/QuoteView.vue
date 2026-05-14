@@ -18,7 +18,7 @@
 
         <!-- Citation -->
         <div class="quote-container" :class="{ ready: isQuoteReady }">
-          <div class="quote-date">Citation générée <b>pour vous</b><br>{{ currentDateFrench }}</div>
+          <div class="quote-date">Citation générée <b>pour vous</b> parmi {{ nbQuotes }} citations<br>{{ currentDateFrench }}</div>
           <div class="quote-text">
             “{{ quote }}”
           </div>
@@ -96,6 +96,7 @@ const viewedAt = ref<Date | null>(null)
 const quotationRated = ref(false)
 const rating = ref(0)
 const hoverRating = ref(0)
+const nbQuotes = ref(0)
 const isQuoteReady = ref(false)
 const visibleParagraphs = ref([false, false, false, false])
 
@@ -190,32 +191,30 @@ onMounted(async () => {
   try {
     // Vérifier si la citation est déjà dans le store
     if (quoteStore.currentQuote.id !== null && quoteStore.currentQuote.text) {
-      console.log('Using quote from store:', quoteStore.currentQuote);
       quoteId.value = String(quoteStore.currentQuote.id)
       quote.value = quoteStore.currentQuote.text
       author.value = quoteStore.currentQuote.author
       wiki_link.value = quoteStore.currentQuote.wiki_link || ''
+      nbQuotes.value = quoteStore.currentQuote.nb_quotes || 0
       if (quoteStore.currentQuote.viewed_at) {
         viewedAt.value = new Date(quoteStore.currentQuote.viewed_at)
       }
     } else {
       // Récupérer la citation depuis le serveur
       const geo = 'FR'
-      console.log('Get device Id...');
       const deviceId = await initializeUser();
-      console.log('deviceId', deviceId);
       const response = await axios.get('/api/quoteoftheday',
       {
         params: {
           geolocalisation: geo,
           deviceId: deviceId }
       })
-      console.log('Quote of the day response:', response)
       if (response.status === 200 && response.data.text) {
         quoteId.value = response.data.id
         quote.value = response.data.text
         author.value = response.data.author || 'Inconnu'
         wiki_link.value = response.data.wiki_link || ''
+        nbQuotes.value = response.data.nb_quotes || 0
         if (response.data.viewed_at) {
           viewedAt.value = new Date(response.data.viewed_at)
         }
@@ -226,7 +225,8 @@ onMounted(async () => {
           text: response.data.text,
           author: response.data.author || 'Inconnu',
           wiki_link: response.data.wiki_link || '',
-          viewed_at: response.data.viewed_at
+          viewed_at: response.data.viewed_at,
+          nb_quotes: response.data.nb_quotes
         })
       } else {
         quote.value = "Le hasard c'est Dieu qui se balade incognito"
@@ -340,7 +340,6 @@ onMounted(async () => {
   margin-top: 1.5rem;
   font-size: 1.2rem;
   text-align: right;
-  /*color: var(--ion-color-medium);*/
   color: var(--ion-text-color-step-250);
   display: flex;
   align-items: center;
