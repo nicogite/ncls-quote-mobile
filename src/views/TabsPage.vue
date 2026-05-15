@@ -40,7 +40,7 @@
       </div>
     </ion-content>
   </ion-menu>
-  <ion-page id="main-content">
+  <ion-page id="main-content" v-bind="$attrs">
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
@@ -86,6 +86,8 @@ import { Preferences } from '@capacitor/preferences';
 import axios from '@/services/api';
 import { computed } from 'vue';
 import { useNotifications } from '@/composables/useNotifications';
+
+defineOptions({ inheritAttrs: false });
 
 const router = useRouter();
 const route = useRoute();
