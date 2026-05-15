@@ -41,6 +41,7 @@ import {
   IonTitle, 
   IonContent,
   IonButtons,
+  IonButton,
   IonMenuButton,
   IonSpinner,
   onIonViewWillEnter
