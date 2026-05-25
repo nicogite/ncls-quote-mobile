@@ -58,6 +58,12 @@
         </div>
       </div>
     </ion-content>
+
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button class="quote-action-button" @click="shareAll" :disabled="history.length === 0">
+        <ion-icon :icon="shareSocial" size="large" />
+      </ion-fab-button>
+    </ion-fab>
   </ion-page>
 </template>
 
@@ -75,6 +81,8 @@ import {
   IonButton,
   IonMenuButton,
   IonIcon,
+  IonFab,
+  IonFabButton,
   toastController,
   onIonViewWillEnter
 } from '@ionic/vue'
@@ -107,6 +115,21 @@ function formatDate(dateString: string): string {
   const minutes = date.getMinutes().toString().padStart(2, '0')
   
   return `Vu le ${dayName} ${day} ${month} ${year} à ${hours}h${minutes}`
+}
+
+async function shareAll() {
+  try {
+    const text = history.value
+      .map(item => `"${item.quote_text}" — ${item.quote_author || 'Inconnu'}`)
+      .join('\n\n')
+    await Share.share({
+      title: 'Mes citations du jour',
+      text,
+      dialogTitle: 'Partager mes citations'
+    })
+  } catch (error) {
+    console.error('Erreur lors du partage:', error)
+  }
 }
 
 async function shareQuote(item: HistoryItem) {
@@ -293,6 +316,12 @@ onIonViewWillEnter(() => {
 
 .share-icon:active {
   transform: scale(0.95);
+}
+
+.quote-action-button {
+  --background: #fff;
+  --color: var(--ion-color-medium-shade);
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .reveal-quote-button {
