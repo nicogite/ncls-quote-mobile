@@ -39,18 +39,16 @@
                 <ion-icon
                   v-for="starNum in 5"
                   :key="starNum"
-                  :icon="starNum <= item.rating ? star : starOutline"
-                  :class="{ active: starNum <= item.rating }"
+                  :icon="starNum <= (hoverRatings[item.quote_id] || item.rating) ? star : starOutline"
+                  :class="{ active: starNum <= item.rating, hover: starNum <= hoverRatings[item.quote_id] }"
+                  @click="setRating(item, starNum)"
+                  @mouseenter="hoverRatings[item.quote_id] = starNum"
+                  @mouseleave="hoverRatings[item.quote_id] = 0"
                 />
               </div>
               
               <p class="viewed-date">{{ formatDate(item.viewed_at) }}</p>
               
-              <ion-icon 
-                :icon="trashOutline" 
-                class="delete-icon"
-                @click="confirmDelete(item)"
-              />
             </ion-card-content>
           </ion-card>
         </div>
@@ -73,11 +71,10 @@ import {
   IonButton,
   IonMenuButton,
   IonIcon,
-  alertController,
   toastController,
   onIonViewWillEnter
 } from '@ionic/vue'
-import { star, starOutline, trashOutline, bookOutline } from 'ionicons/icons'
+import { star, starOutline, bookOutline } from 'ionicons/icons'
 import { ref } from 'vue'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService'
@@ -92,6 +89,7 @@ interface HistoryItem {
 
 const loading = ref(true)
 const history = ref<HistoryItem[]>([])
+const hoverRatings = ref<Record<number, number>>({})
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
@@ -104,6 +102,34 @@ function formatDate(dateString: string): string {
   const minutes = date.getMinutes().toString().padStart(2, '0')
   
   return `Vu le ${dayName} ${day} ${month} ${year} à ${hours}h${minutes}`
+}
+
+async function setRating(item: HistoryItem, starValue: number) {
+  try {
+    const deviceId = await initializeUser()
+    await axios.post('/api/ratings', {
+      quote_id: item.quote_id,
+      device_id: deviceId,
+      rating: starValue
+    })
+    item.rating = starValue
+    const toast = await toastController.create({
+      message: `Notation de ${starValue} étoile${starValue > 1 ? 's' : ''} enregistrée !`,
+      duration: 2000,
+      position: 'bottom',
+      color: 'success'
+    })
+    await toast.present()
+  } catch (error) {
+    console.error('Erreur lors de la notation:', error)
+    const toast = await toastController.create({
+      message: 'Erreur lors de l\'enregistrement de la notation',
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger'
+    })
+    await toast.present()
+  }
 }
 
 async function loadHistory() {
@@ -129,60 +155,6 @@ async function loadHistory() {
     await toast.present()
   } finally {
     loading.value = false
-  }
-}
-
-async function confirmDelete(item: HistoryItem) {
-  const alert = await alertController.create({
-    header: 'Confirmer la suppression',
-    message: `Voulez-vous vraiment supprimer cette citation de votre historique ?`,
-    buttons: [
-      {
-        text: 'Annuler',
-        role: 'cancel'
-      },
-      {
-        text: 'Supprimer',
-        role: 'destructive',
-        handler: () => {
-          deleteHistoryItem(item)
-        }
-      }
-    ]
-  })
-
-  await alert.present()
-}
-
-async function deleteHistoryItem(item: HistoryItem) {
-  try {
-    const deviceId = await initializeUser()
-    
-    // Appeler l'API pour supprimer l'entrée
-    await axios.delete(`/api/ratings/${item.quote_id}`, {
-      params: { device_id: deviceId }
-    })
-    
-    // Retirer l'élément de la liste locale
-    history.value = history.value.filter(h => h.quote_id !== item.quote_id)
-    
-    const toast = await toastController.create({
-      message: 'Citation supprimée de l\'historique',
-      duration: 2000,
-      position: 'bottom',
-      color: 'success'
-    })
-    await toast.present()
-  } catch (error) {
-    console.error('Erreur lors de la suppression:', error)
-    
-    const toast = await toastController.create({
-      message: 'Erreur lors de la suppression',
-      duration: 3000,
-      position: 'bottom',
-      color: 'danger'
-    })
-    await toast.present()
   }
 }
 
@@ -230,7 +202,7 @@ onIonViewWillEnter(() => {
 }
 
 .quote-card ion-card-content {
-  padding-bottom: 3rem;
+  padding-bottom: 1rem;
 }
 
 .quote-text {
@@ -259,39 +231,28 @@ onIonViewWillEnter(() => {
 .rating-display ion-icon {
   font-size: 1.2rem;
   color: #ccc;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.rating-display ion-icon:hover {
+  transform: scale(1.2);
 }
 
 .rating-display ion-icon.active {
   color: #FFD700;
 }
 
+.rating-display ion-icon.hover {
+  color: #FFD700;
+  opacity: 0.7;
+}
+
 .viewed-date {
-  position: absolute;
-  bottom: 12px;
-  left: 16px;
   font-size: 0.85rem;
   color: var(--ion-color-medium);
+  margin-top: 0.5rem;
   margin-bottom: 0;
-}
-
-.delete-icon {
-  position: absolute;
-  bottom: 12px;
-  right: 16px;
-  font-size: 1.5rem;
-  color: var(--ion-color-medium);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  opacity: 0.6;
-}
-
-.delete-icon:hover {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-.delete-icon:active {
-  transform: scale(0.95);
 }
 
 .reveal-quote-button {
