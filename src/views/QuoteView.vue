@@ -28,12 +28,7 @@
               <img src="/img/Wiki.png" alt="Wikipedia" class="wiki-icon" />
             </a>
           </div>
-          <div class="quote-comment">
-            <p :class="{ visible: visibleParagraphs[0] }">Prenez un moment pour méditer sur votre citation.</p>
-            <p :class="{ visible: visibleParagraphs[1] }">Si elle vous parle, n'hésitez pas à lui donner une note.</p>
-            <p :class="{ visible: visibleParagraphs[2] }">Vous pouvez aussi la partager avec un de vos proches qu'elle peut concerner ou la copier.</p>
-            <p :class="{ visible: visibleParagraphs[3] }">Et vous la retrouverez aussi dans votre Historique.</p>
-          </div>
+          <div class="quote-comment" :class="{ visible: commentVisible }" v-html="postCitationContent"></div>
         </div>
       </div>
       
@@ -84,6 +79,7 @@ import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService';
 import { Preferences } from '@capacitor/preferences';
 import { useQuoteStore } from '@/store/quote';
+import { ensureContentLoaded, getContentValue } from '@/services/contentService';
 
 const router = useRouter()
 const quoteStore = useQuoteStore()
@@ -98,7 +94,8 @@ const rating = ref(0)
 const hoverRating = ref(0)
 const nbQuotes = ref(0)
 const isQuoteReady = ref(false)
-const visibleParagraphs = ref([false, false, false, false])
+const commentVisible = ref(false)
+const postCitationContent = ref('')
 
 const currentDateFrench = computed(() => {
   const dateToFormat = viewedAt.value || new Date()
@@ -188,6 +185,9 @@ async function shareQuote() {
 }
 
 onMounted(async () => {
+  await ensureContentLoaded()
+  postCitationContent.value = getContentValue('test_post_citation')
+
   try {
     // Vérifier si la citation est déjà dans le store
     if (quoteStore.currentQuote.id !== null && quoteStore.currentQuote.text) {
@@ -245,18 +245,9 @@ onMounted(async () => {
         key: 'last_quote_view',
         value: getTodayFormatted()
       })
-      // Afficher les paragraphes un par un avec 2000ms d'intervalle
+      // Afficher le commentaire après 5 secondes
       setTimeout(() => {
-        visibleParagraphs.value[0] = true
-        setTimeout(() => {
-          visibleParagraphs.value[1] = true
-          setTimeout(() => {
-            visibleParagraphs.value[2] = true
-            setTimeout(() => {
-              visibleParagraphs.value[3] = true
-            }, 2000)
-          }, 2000)
-        }, 2000)
+        commentVisible.value = true
       }, 5000)
     }, 1500);
     
@@ -306,17 +297,17 @@ onMounted(async () => {
   color: var(--ion-text-color-step-250);
   text-align: left;
   padding-left: 40px;
+  opacity: 0;
+  transition: opacity 2s ease-in;
+}
+
+.quote-comment.visible {
+  opacity: 1;
 }
 
 .quote-comment p {
-  opacity: 0;
-  transition: opacity 2s ease-in;
   text-align: right;
   font-style: italic;
-}
-
-.quote-comment p.visible {
-  opacity: 1;
 }
 
 .quote-icon-left,

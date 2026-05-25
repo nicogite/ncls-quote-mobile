@@ -1,0 +1,15 @@
+{
+	"appId": "com.arc.macitationdujour",
+	"appName": "Ma citation du Jour",
+	"webDir": "dist",
+	"packageClassList": [
+		"AppPlugin",
+		"ClipboardPlugin",
+		"HapticsPlugin",
+		"KeyboardPlugin",
+		"LocalNotificationsPlugin",
+		"PreferencesPlugin",
+		"SharePlugin",
+		"StatusBarPlugin"
+	]
+}
