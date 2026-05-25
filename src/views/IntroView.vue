@@ -15,8 +15,8 @@
         <ion-title class="ion-text-center">Ma citation du jour</ion-title>
         <ion-buttons slot="end">
           <ion-button 
-            :disabled="currentSlide >= 2 || isTransitioning"
-            :class="{ 'invisible': currentSlide >= 2 || isTransitioning }"
+            :disabled="currentSlide >= 3 || isTransitioning"
+            :class="{ 'invisible': currentSlide >= 3 || isTransitioning }"
             @click="nextSlide"
             aria-label="Slide suivante"
           >
@@ -62,6 +62,19 @@
           <div class="ion-padding">
             <div class="slide-container">
               <div class="slide-text" v-html="slide3Content"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div 
+          class="slide"
+          :class="getSlideClass(3)"
+          v-if="shouldShowSlide(3)"
+        >
+          <div class="ion-padding">
+            <div class="slide-container">
+              <div class="slide-text" v-html="slide4Content"></div>
               <ion-button class="reveal-quote-button" @click="handleClick">Votre citation du jour</ion-button>
             </div>
           </div>
@@ -70,7 +83,7 @@
         <!-- Pagination dots -->
         <div class="pagination">
           <span 
-            v-for="i in 3" 
+            v-for="i in 4" 
             :key="i"
             class="pagination-dot"
             :class="{ active: currentSlide === i - 1 }"
@@ -91,6 +104,7 @@ const ionRouter = useIonRouter();
 const slide1Content = ref('');
 const slide2Content = ref('');
 const slide3Content = ref('');
+const slide4Content = ref('');
 const currentSlide = ref(0);
 const isTransitioning = ref(false);
 const transitionPhase = ref<'fade-out' | 'fade-in' | null>(null);
@@ -135,7 +149,7 @@ const getSlideClass = (index: number) => {
 };
 
 const nextSlide = () => {
-  if (isTransitioning.value || currentSlide.value >= 2) return;
+  if (isTransitioning.value || currentSlide.value >= 3) return;
   changeSlide(currentSlide.value + 1);
 };
 
@@ -199,6 +213,7 @@ onIonViewWillEnter(async () => {
   slide1Content.value = getContentValue('intro_1');
   slide2Content.value = getContentValue('intro_2');
   slide3Content.value = getContentValue('intro_3');
+  slide4Content.value = getContentValue('intro_4');
 });
 </script>
 
