@@ -48,7 +48,11 @@
               </div>
               
               <p class="viewed-date">{{ formatDate(item.viewed_at) }}</p>
-              
+              <ion-icon
+                :icon="shareSocial"
+                class="share-icon"
+                @click="shareQuote(item)"
+              />
             </ion-card-content>
           </ion-card>
         </div>
@@ -74,10 +78,11 @@ import {
   toastController,
   onIonViewWillEnter
 } from '@ionic/vue'
-import { star, starOutline, bookOutline } from 'ionicons/icons'
+import { star, starOutline, bookOutline, shareSocial } from 'ionicons/icons'
 import { ref } from 'vue'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService'
+import { Share } from '@capacitor/share'
 
 interface HistoryItem {
   quote_id: number
@@ -102,6 +107,18 @@ function formatDate(dateString: string): string {
   const minutes = date.getMinutes().toString().padStart(2, '0')
   
   return `Vu le ${dayName} ${day} ${month} ${year} à ${hours}h${minutes}`
+}
+
+async function shareQuote(item: HistoryItem) {
+  try {
+    await Share.share({
+      title: 'Ma citation du jour',
+      text: `"${item.quote_text}" - ${item.quote_author || 'Inconnu'}`,
+      dialogTitle: 'Partager cette citation'
+    })
+  } catch (error) {
+    console.error('Erreur lors du partage:', error)
+  }
 }
 
 async function setRating(item: HistoryItem, starValue: number) {
@@ -202,7 +219,7 @@ onIonViewWillEnter(() => {
 }
 
 .quote-card ion-card-content {
-  padding-bottom: 1rem;
+  padding-bottom: 3rem;
 }
 
 .quote-text {
@@ -249,10 +266,33 @@ onIonViewWillEnter(() => {
 }
 
 .viewed-date {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
   font-size: 0.85rem;
   color: var(--ion-color-medium);
   margin-top: 0.5rem;
   margin-bottom: 0;
+}
+
+.share-icon {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 1.5rem;
+  color: var(--ion-color-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.share-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.share-icon:active {
+  transform: scale(0.95);
 }
 
 .reveal-quote-button {
