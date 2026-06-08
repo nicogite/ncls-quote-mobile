@@ -23,7 +23,7 @@ import { useNotifications } from '@/composables/useNotifications';
 const isBootstrapping = ref(true)
 const MIN_SPLASH_DURATION_MS = 5000
 const router = useRouter()
-const { restoreNotifications, initializeNotificationListener } = useNotifications();
+const { restoreNotifications } = useNotifications();
 
 // Précharger la texture de fond pour les autres pages
 function preloadTexture(): Promise<void> {
@@ -53,10 +53,7 @@ onMounted(async () => {
       new Promise((resolve) => setTimeout(resolve, MIN_SPLASH_DURATION_MS))
     ])
 
-    // Initialiser le listener de notifications pour la reprogrammation automatique
-    initializeNotificationListener();
-
-    // Restaurer les notifications avec les paramètres sauvegardés
+    // Ré-appliquer la planification répétitive avec les paramètres sauvegardés
     await restoreNotifications();
 
     // Vérifier si c'est le premier lancement

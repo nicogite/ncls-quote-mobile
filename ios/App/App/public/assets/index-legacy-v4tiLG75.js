@@ -1,0 +1,1 @@
+System.register(["./index-legacy-B-DtAEFv.js"],function(e,t){"use strict";var r,n;return{setters:[e=>{r=e.a3,n=e.a4}],execute:function(){e("S",r("Share",{web:()=>n(()=>t.import("./web-legacy-My8n8ijL.js"),void 0).then(e=>new e.ShareWeb)}))}}});

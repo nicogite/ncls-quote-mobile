@@ -63,8 +63,9 @@ import {
 import { ref, watch, onMounted } from 'vue';
 import { useNotifications } from '@/composables/useNotifications';
 
-// État des notifications
-const notificationsEnabled = ref(true);
+// État des notifications — désactivé tant qu'aucun réglage n'est sauvegardé,
+// pour refléter l'état réel (rien n'est programmé au premier lancement).
+const notificationsEnabled = ref(false);
 const notificationFrequency = ref<'daily' | 'weekly'>('daily');
 
 const { 
@@ -85,19 +86,20 @@ onMounted(async () => {
 
 // Gérer le changement du toggle des notifications
 const onNotificationsToggle = async () => {
-  console.log('Notifications enabled:', notificationsEnabled.value);
-  
+  if (notificationsEnabled.value) {
+    const scheduled = await scheduleUserRhythm(notificationFrequency.value);
+    // Permission refusée : on remet le toggle sur « désactivé »
+    if (!scheduled) {
+      notificationsEnabled.value = false;
+    }
+  } else {
+    await cancelNotifications();
+  }
+
   await saveNotificationSettings({
     enabled: notificationsEnabled.value,
     frequency: notificationFrequency.value
   });
-  
-  if (notificationsEnabled.value) {
-    await scheduleUserRhythm(notificationFrequency.value);
-    console.log('Notification frequency:', notificationFrequency.value);
-  } else {
-    await cancelNotifications();
-  }
 };
 
 // Observer les changements de fréquence
