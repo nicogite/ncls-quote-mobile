@@ -18,12 +18,12 @@ import { initializeUser } from '@/services/deviceService';
 import { ensureContentLoaded } from '@/services/contentService';
 import axios from '@/services/api';
 import { useQuoteStore } from '@/store/quote';
-import { useNotifications } from '@/composables/useNotifications';
+import { usePushNotifications } from '@/composables/usePushNotifications';
 
 const isBootstrapping = ref(true)
 const MIN_SPLASH_DURATION_MS = 5000
 const router = useRouter()
-const { restoreNotifications } = useNotifications();
+const { restorePushRegistration } = usePushNotifications();
 
 // Précharger la texture de fond pour les autres pages
 function preloadTexture(): Promise<void> {
@@ -53,8 +53,9 @@ onMounted(async () => {
       new Promise((resolve) => setTimeout(resolve, MIN_SPLASH_DURATION_MS))
     ])
 
-    // Ré-appliquer la planification répétitive avec les paramètres sauvegardés
-    await restoreNotifications();
+    // Ré-enregistrer le token push auprès du serveur (et purger l'ancienne
+    // notification locale planifiée par les versions précédentes)
+    await restorePushRegistration();
 
     // Vérifier si c'est le premier lancement
     const { value: firstLaunch } = await Preferences.get({ key: 'first_launch' });

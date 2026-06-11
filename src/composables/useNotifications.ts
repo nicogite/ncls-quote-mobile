@@ -1,4 +1,4 @@
-import { LocalNotifications, type Weekday } from '@capacitor/local-notifications';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { Preferences } from '@capacitor/preferences';
 
 export interface NotificationSettings {
@@ -8,15 +8,11 @@ export interface NotificationSettings {
 
 const NOTIFICATION_SETTINGS_KEY = 'notification_settings';
 
-// Heure d'envoi de la notification
-// ⚠️ TEMPORAIRE (test) — remettre 13:25 avant prod
-const NOTIFY_HOUR = 17;
-const NOTIFY_MINUTE = 48;
-
-// Jour de la notification hebdomadaire — lundi.
-// Capacitor : Sunday = 1, Monday = 2, ... Saturday = 7
-const WEEKLY_WEEKDAY: Weekday = 2 as Weekday;
-
+/**
+ * Notifications locales : ne sert plus qu'au bouton de test (5 s) et au
+ * stockage des préférences. La notification quotidienne/hebdomadaire est
+ * désormais un push FCM envoyé par le serveur — voir usePushNotifications.
+ */
 export function useNotifications() {
 
   const NOTIFICATION_ID = 20260416;
@@ -34,50 +30,6 @@ export function useNotifications() {
     return perm.display === 'granted';
   };
 
-  /**
-   * Programme une notification répétitive gérée par l'OS.
-   *
-   * On utilise une planification CALENDAIRE (`on` + `repeats: true`) :
-   * la notification se déclenche à l'heure d'horloge exacte chaque jour
-   * (ou chaque lundi), sans décalage progressif, et survit à la fermeture
-   * de l'app comme au redémarrage de l'appareil — contrairement à une
-   * reprogrammation manuelle via les listeners, qui ne se déclenche pas
-   * lorsque l'app est fermée.
-   */
-  const scheduleUserRhythm = async (frequence: 'daily' | 'weekly') => {
-    const granted = await ensurePermission();
-    if (!granted) {
-      console.warn('Permission de notification refusée, planification annulée.');
-      return false;
-    }
-
-    // Annuler l'ancienne programmation avant d'en recréer une
-    await LocalNotifications.cancel({ notifications: [{ id: NOTIFICATION_ID }] });
-
-    // Planification calendaire répétitive native
-    const on =
-      frequence === 'daily'
-        ? { hour: NOTIFY_HOUR, minute: NOTIFY_MINUTE }
-        : { weekday: WEEKLY_WEEKDAY, hour: NOTIFY_HOUR, minute: NOTIFY_MINUTE };
-
-    await LocalNotifications.schedule({
-      notifications: [{
-        id: NOTIFICATION_ID,
-        title: 'Ma citation du jour',
-        body: 'Votre citation du jour vous attend !',
-        schedule: {
-          on,
-          repeats: true,
-          // Permet le déclenchement même en mode Doze (Android),
-          // sans exiger la permission d'alarme exacte (compatible Play Store).
-          allowWhileIdle: true,
-        },
-      }],
-    });
-
-    return true;
-  };
-
   const saveNotificationSettings = async (settings: NotificationSettings) => {
     await Preferences.set({
       key: NOTIFICATION_SETTINGS_KEY,
@@ -93,22 +45,12 @@ export function useNotifications() {
     return null;
   };
 
+  /**
+   * Annule la notification locale planifiée par les anciennes versions de
+   * l'app (avant le passage au push serveur).
+   */
   const cancelNotifications = async () => {
     await LocalNotifications.cancel({ notifications: [{ id: NOTIFICATION_ID }] });
-  };
-
-  /**
-   * Au démarrage de l'app, ré-applique la planification si l'utilisateur
-   * a activé les notifications. L'opération est idempotente (annule puis
-   * reprogramme), ce qui garantit l'état correct même après une mise à
-   * jour de l'app ou si la planification a été perdue.
-   */
-  const restoreNotifications = async () => {
-    const settings = await getNotificationSettings();
-    if (settings && settings.enabled) {
-      await scheduleUserRhythm(settings.frequency);
-    }
-    return settings;
   };
 
   /** Notification de test, déclenchée 5 secondes plus tard (debug). */
@@ -134,11 +76,9 @@ export function useNotifications() {
 
   return {
     ensurePermission,
-    scheduleUserRhythm,
     scheduleSimpleNotification,
     saveNotificationSettings,
     getNotificationSettings,
     cancelNotifications,
-    restoreNotifications,
   };
 }

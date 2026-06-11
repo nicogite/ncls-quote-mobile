@@ -62,18 +62,15 @@ import {
 } from '@ionic/vue';
 import { ref, watch, onMounted } from 'vue';
 import { useNotifications } from '@/composables/useNotifications';
+import { usePushNotifications } from '@/composables/usePushNotifications';
 
 // État des notifications — désactivé tant qu'aucun réglage n'est sauvegardé,
 // pour refléter l'état réel (rien n'est programmé au premier lancement).
 const notificationsEnabled = ref(false);
 const notificationFrequency = ref<'daily' | 'weekly'>('daily');
 
-const { 
-  scheduleUserRhythm, 
-  saveNotificationSettings, 
-  getNotificationSettings, 
-  cancelNotifications 
-} = useNotifications();
+const { saveNotificationSettings, getNotificationSettings } = useNotifications();
+const { enablePush, disablePush } = usePushNotifications();
 
 // Charger les préférences sauvegardées
 onMounted(async () => {
@@ -87,13 +84,13 @@ onMounted(async () => {
 // Gérer le changement du toggle des notifications
 const onNotificationsToggle = async () => {
   if (notificationsEnabled.value) {
-    const scheduled = await scheduleUserRhythm(notificationFrequency.value);
-    // Permission refusée : on remet le toggle sur « désactivé »
-    if (!scheduled) {
+    const registered = await enablePush(notificationFrequency.value);
+    // Permission refusée ou enregistrement impossible : on remet le toggle sur « désactivé »
+    if (!registered) {
       notificationsEnabled.value = false;
     }
   } else {
-    await cancelNotifications();
+    await disablePush();
   }
 
   await saveNotificationSettings({
@@ -109,7 +106,8 @@ watch(notificationFrequency, async (newValue) => {
       enabled: notificationsEnabled.value,
       frequency: newValue
     });
-    await scheduleUserRhythm(newValue);
+    // Ré-enregistrement : met à jour la fréquence côté serveur
+    await enablePush(newValue);
     console.log('Notification frequency:', newValue);
   }
 });

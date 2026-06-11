@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "972084044031",
+    "project_id": "ma-citation-du-jour",
+    "storage_bucket": "ma-citation-du-jour.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972084044031:android:bdb3bb539b9bbc1a9aecca",
+        "android_client_info": {
+          "package_name": "com.arc.macitationdujour"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmZpxprFA-CBwCt_xm8klLggRb5pMXENk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
