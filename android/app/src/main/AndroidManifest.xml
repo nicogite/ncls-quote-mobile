@@ -34,8 +34,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Notifications locales (Android 13+ exige une permission runtime) -->
+    <!-- Notifications push (Android 13+ exige une permission runtime) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Reprogrammer les notifications répétitives après un redémarrage de l'appareil -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 </manifest>
