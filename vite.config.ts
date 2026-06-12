@@ -8,7 +8,14 @@ import { defineConfig } from 'vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          // Traiter les éléments Swiper comme des web components natifs
+          isCustomElement: (tag) => tag.startsWith('swiper-'),
+        },
+      },
+    }),
     legacy()
   ],
   resolve: {

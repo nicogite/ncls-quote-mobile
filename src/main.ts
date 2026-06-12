@@ -5,6 +5,10 @@ import router from './router';
 
 import { IonicVue } from '@ionic/vue';
 
+/* Swiper web components (swiper-container / swiper-slide) */
+import { register as registerSwiper } from 'swiper/element/bundle';
+registerSwiper();
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
