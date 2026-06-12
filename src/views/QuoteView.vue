@@ -348,7 +348,13 @@ onMounted(async () => {
 
 .quote-action-button {
   --background: #fff;
+  --background-activated: #fff;
+  --background-focused: #fff;
+  --background-hover: #fff;
   --color: var(--ion-color-medium-shade);
+  --color-activated: var(--ion-color-medium-shade);
+  --color-focused: var(--ion-color-medium-shade);
+  --ripple-color: transparent;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
