@@ -28,7 +28,15 @@
               <img src="/img/Wiki.png" alt="Wikipedia" class="wiki-icon" />
             </a>
           </div>
-          <div class="quote-comment" :class="{ visible: commentVisible }" v-html="postCitationContent"></div>
+          <div class="quote-comment">
+            <p
+              v-for="(paragraph, index) in commentParagraphs"
+              :key="index"
+              class="quote-comment-paragraph"
+              :class="{ visible: index < visibleParagraphs }"
+              v-html="paragraph"
+            ></p>
+          </div>
         </div>
       </div>
       
@@ -94,8 +102,28 @@ const rating = ref(0)
 const hoverRating = ref(0)
 const nbQuotes = ref(0)
 const isQuoteReady = ref(false)
-const commentVisible = ref(false)
-const postCitationContent = ref('')
+const commentParagraphs = ref<string[]>([])
+const visibleParagraphs = ref(0)
+
+// Découpe le contenu HTML en paragraphes pour les révéler un par un
+function splitIntoParagraphs(html: string): string[] {
+  if (!html) return []
+  const doc = new DOMParser().parseFromString(html, 'text/html')
+  const paragraphs = Array.from(doc.body.querySelectorAll('p'))
+  if (paragraphs.length > 0) {
+    return paragraphs.map((p) => p.innerHTML)
+  }
+  return [html]
+}
+
+// Révèle les paragraphes les uns après les autres
+function revealParagraphsSequentially() {
+  commentParagraphs.value.forEach((_, index) => {
+    setTimeout(() => {
+      visibleParagraphs.value = index + 1
+    }, index * 4000)
+  })
+}
 
 const currentDateFrench = computed(() => {
   const dateToFormat = viewedAt.value || new Date()
@@ -186,7 +214,7 @@ async function shareQuote() {
 
 onMounted(async () => {
   await ensureContentLoaded()
-  postCitationContent.value = getContentValue('test_post_citation')
+  commentParagraphs.value = splitIntoParagraphs(getContentValue('test_post_citation'))
 
   try {
     // Vérifier si la citation est déjà dans le store
@@ -245,9 +273,9 @@ onMounted(async () => {
         key: 'last_quote_view',
         value: getTodayFormatted()
       })
-      // Afficher le commentaire après 5 secondes
+      // Afficher les paragraphes du commentaire les uns après les autres
       setTimeout(() => {
-        commentVisible.value = true
+        revealParagraphsSequentially()
       }, 5000)
     }, 1500);
     
@@ -297,17 +325,17 @@ onMounted(async () => {
   color: var(--ion-text-color-step-250);
   text-align: left;
   padding-left: 40px;
-  opacity: 0;
-  transition: opacity 2s ease-in;
 }
 
-.quote-comment.visible {
-  opacity: 1;
-}
-
-.quote-comment p {
+.quote-comment-paragraph {
   text-align: right;
   font-style: italic;
+  opacity: 0;
+  transition: opacity 3s ease-in;
+}
+
+.quote-comment-paragraph.visible {
+  opacity: 1;
 }
 
 .quote-icon-left,

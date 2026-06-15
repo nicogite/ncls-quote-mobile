@@ -189,7 +189,8 @@ onIonViewWillEnter(async () => {
   color: var(--ion-text-color);
   position: relative;
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
   gap: 0.5rem;
 }
 
