@@ -46,7 +46,7 @@
           class="ion-margin-bottom quote-action-button"
           @click="goToInterpretation"
         >
-          <ion-icon :icon="sparklesOutline" size="large" />
+          <img src="/img/icon-IA.jpg" alt="Interprétation IA" class="ia-icon" />
         </ion-fab-button>
         <ion-fab-button id="ratingButton" class="ion-margin-bottom quote-action-button" :class="{ rating: quotationRated }" @click="toggleLike">
           <ion-icon v-if="!quotationRated" :icon="starOutline" size="large" />
@@ -86,7 +86,7 @@ import {
   IonFabButton,
   toastController
 } from '@ionic/vue'
-import { star, starOutline, shareSocial, sparklesOutline } from 'ionicons/icons'
+import { star, starOutline, shareSocial } from 'ionicons/icons'
 import { Share } from '@capacitor/share'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -387,6 +387,12 @@ onMounted(async () => {
   vertical-align: middle;
   border: 1px solid #000;
   border-radius: 15%;
+}
+
+.ia-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .quote-action-button {

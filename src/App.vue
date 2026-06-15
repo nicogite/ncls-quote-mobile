@@ -81,7 +81,9 @@ onMounted(async () => {
               text: response.data.text,
               author: response.data.author || 'Inconnu',
               wiki_link: response.data.wiki_link || '',
-              viewed_at: response.data.viewed_at
+              interpretation: response.data.interpretation || '',
+              viewed_at: response.data.viewed_at,
+              nb_quotes: response.data.nb_quotes
             })
           }
         } catch (error) {

@@ -60,7 +60,7 @@ import { ref } from 'vue'
 import { Capacitor } from '@capacitor/core'
 import { EmailComposer } from 'capacitor-email-composer'
 
-const CONTACT_EMAIL = 'michael@copsidas.com'
+const CONTACT_EMAIL = 'contact@arc-mediation.fr'
 const SUBJECT = 'Ma Citation du Jour — Contact'
 
 const message = ref('')
