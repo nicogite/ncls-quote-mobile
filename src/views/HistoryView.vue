@@ -280,11 +280,11 @@ onIonViewWillEnter(() => {
 }
 
 .rating-display ion-icon.active {
-  color: #FFD700;
+  color: var(--mcdj-gold-500);
 }
 
 .rating-display ion-icon.hover {
-  color: #FFD700;
+  color: var(--mcdj-gold-500);
   opacity: 0.7;
 }
 

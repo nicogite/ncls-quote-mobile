@@ -72,7 +72,7 @@ const interpretation = computed(() => quoteStore.currentQuote.interpretation || 
 .quote-text {
   font-size: 1.5rem;
   font-style: italic;
-  font-family: garamond, serif;
+  font-family: var(--citation-font);
   line-height: 1.8;
   margin: 2rem 0;
   margin-top: 1rem;

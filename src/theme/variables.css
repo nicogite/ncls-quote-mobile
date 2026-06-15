@@ -1,61 +1,138 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
 
-/* .md for Material Design (Android) */ 
+/* ============================================================
+ * Ma Citation du Jour — design system (aligné sur le backoffice)
+ * Editorial light : papier crème, masthead teal, filets dorés.
+ * Polices : Inter (UI / texte), Playfair Display (citations / titres).
+ * ============================================================ */
+
+@font-face {
+  font-family: 'AppFont';
+  src: url('/src/assets/fonts/playfair/inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'AppFont';
+  src: url('/src/assets/fonts/playfair/inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'CitationFont';
+  src: url('/src/assets/fonts/playfair/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'CitationFont';
+  src: url('/src/assets/fonts/playfair/PlayfairDisplay-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* .md for Material Design (Android) */
 
 :root.md, :root.ios {
-	--ion-background-color: #F2EDEA;
-	--ion-background-color-rgb: 242,237,234;
+	/* ----- Tokens de marque (repris du backoffice) ----- */
+	--mcdj-teal-900: #0F4144;
+	--mcdj-teal-800: #154C4F;
+	--mcdj-teal-700: #1F6B6E;
+	--mcdj-teal-600: #2A7B7E;
+	--mcdj-teal-50:  #E6F0F0;
 
-	--ion-text-color: #000000;
-	--ion-text-color-rgb: 0,0,0;
+	--mcdj-cream-50:  #FBF7EE;  /* carte / surface */
+	--mcdj-cream-100: #F5EFE3;  /* fond de page */
+	--mcdj-cream-200: #ECE3D0;
+	--mcdj-cream-300: #D9CDB4;
 
-	--ion-text-color-step-50: #0c0c0c;
-	--ion-text-color-step-100: #181817;
-	--ion-text-color-step-150: #242423;
-	--ion-text-color-step-200: #302f2f;
-	--ion-text-color-step-250: #3d3b3b;
-	--ion-text-color-step-300: #494746;
-	--ion-text-color-step-350: #555352;
-	--ion-text-color-step-400: #615f5e;
-	--ion-text-color-step-450: #6d6b69;
-	--ion-text-color-step-500: #797775;
-	--ion-text-color-step-550: #858281;
-	--ion-text-color-step-600: #918e8c;
-	--ion-text-color-step-650: #9d9a98;
-	--ion-text-color-step-700: #a9a6a4;
-	--ion-text-color-step-750: #b6b2b0;
-	--ion-text-color-step-800: #c2bebb;
-	--ion-text-color-step-850: #cec9c7;
-	--ion-text-color-step-900: #dad5d3;
-	--ion-text-color-step-950: #e6e1de;
+	--mcdj-ink-900: #1B1F23;
+	--mcdj-ink-700: #353B41;
+	--mcdj-ink-500: #6B6660;
+	--mcdj-ink-300: #A39C92;
 
-	--ion-background-color-step-50: #e6e1de;
-	--ion-background-color-step-100: #dad5d3;
-	--ion-background-color-step-150: #cec9c7;
-	--ion-background-color-step-200: #c2bebb;
-	--ion-background-color-step-250: #b6b2b0;
-	--ion-background-color-step-300: #a9a6a4;
-	--ion-background-color-step-350: #9d9a98;
-	--ion-background-color-step-400: #918e8c;
-	--ion-background-color-step-450: #858281;
-	--ion-background-color-step-500: #797775;
-	--ion-background-color-step-550: #6d6b69;
-	--ion-background-color-step-600: #615f5e;
-	--ion-background-color-step-650: #555352;
-	--ion-background-color-step-700: #494746;
-	--ion-background-color-step-750: #3d3b3b;
-	--ion-background-color-step-800: #302f2f;
-	--ion-background-color-step-850: #242423;
-	--ion-background-color-step-900: #181817;
-	--ion-background-color-step-950: #0c0c0c;
+	--mcdj-gold-700: #A8884A;
+	--mcdj-gold-500: #C9A961;   /* or brossé — accents, étoiles, filets */
+	--mcdj-gold-300: #E6D5A8;
+	--mcdj-gold-100: #F5EBCF;
 
-  --ion-toolbar-background: #F2EDEA;
-  --ion-toolbar-text-color: #000000;
+	/* ----- Polices ----- */
+	--app-font: 'AppFont', 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--citation-font: 'CitationFont', 'Playfair Display', 'Georgia', serif;
+	--ion-font-family: var(--app-font);
 
-  --ion-tab-bar-background: #F2EDEA;
+	/* ----- Mapping Ionic ----- */
+	--ion-background-color: #F5EFE3;
+	--ion-background-color-rgb: 245,239,227;
 
-  --ion-card-background: #FFFFFF;
+	--ion-text-color: #1B1F23;
+	--ion-text-color-rgb: 27,31,35;
 
-	--ion-color-primary: #1c8e99;
+	--ion-text-color-step-50: #2b2e31;
+	--ion-text-color-step-100: #34373a;
+	--ion-text-color-step-150: #3e4144;
+	--ion-text-color-step-200: #484b4d;
+	--ion-text-color-step-250: #535557;
+	--ion-text-color-step-300: #5d5f61;
+	--ion-text-color-step-350: #67696b;
+	--ion-text-color-step-400: #6b6660;
+	--ion-text-color-step-450: #7c7770;
+	--ion-text-color-step-500: #8d8880;
+	--ion-text-color-step-550: #9a958d;
+	--ion-text-color-step-600: #a39c92;
+	--ion-text-color-step-650: #afa99f;
+	--ion-text-color-step-700: #bbb5ac;
+	--ion-text-color-step-750: #c8c2b9;
+	--ion-text-color-step-800: #d4cec5;
+	--ion-text-color-step-850: #e0dad1;
+	--ion-text-color-step-900: #ece7dd;
+	--ion-text-color-step-950: #f3eee5;
+
+	--ion-background-color-step-50: #ece7dd;
+	--ion-background-color-step-100: #e0dad1;
+	--ion-background-color-step-150: #d4cec5;
+	--ion-background-color-step-200: #c8c2b9;
+	--ion-background-color-step-250: #bbb5ac;
+	--ion-background-color-step-300: #afa99f;
+	--ion-background-color-step-350: #a39c92;
+	--ion-background-color-step-400: #8d8880;
+	--ion-background-color-step-450: #7c7770;
+	--ion-background-color-step-500: #6b6660;
+	--ion-background-color-step-550: #67696b;
+	--ion-background-color-step-600: #5d5f61;
+	--ion-background-color-step-650: #535557;
+	--ion-background-color-step-700: #484b4d;
+	--ion-background-color-step-750: #3e4144;
+	--ion-background-color-step-800: #34373a;
+	--ion-background-color-step-850: #2b2e31;
+	--ion-background-color-step-900: #232628;
+	--ion-background-color-step-950: #1b1f23;
+
+  --ion-toolbar-background: #F5EFE3;
+  --ion-toolbar-text-color: #1B1F23;
+
+  --ion-tab-bar-background: #FBF7EE;
+
+  --ion-card-background: #FBF7EE;
+
+	/* Primaire — teal du masthead */
+	--ion-color-primary: #1F6B6E;
+	--ion-color-primary-rgb: 31,107,110;
+	--ion-color-primary-contrast: #FBF7EE;
+	--ion-color-primary-contrast-rgb: 251,247,238;
+	--ion-color-primary-shade: #154C4F;
+	--ion-color-primary-tint: #2A7B7E;
+
+	/* Secondaire — or brossé (accents) */
+	--ion-color-secondary: #C9A961;
+	--ion-color-secondary-rgb: 201,169,97;
+	--ion-color-secondary-contrast: #1B1F23;
+	--ion-color-secondary-contrast-rgb: 27,31,35;
+	--ion-color-secondary-shade: #A8884A;
+	--ion-color-secondary-tint: #E6D5A8;
 }

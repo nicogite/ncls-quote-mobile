@@ -99,7 +99,7 @@ onIonViewWillEnter(async () => {
 .welcome-content {
   font-size: 1.3rem;
   font-style: italic;
-  font-family: garamond, serif;
+  font-family: var(--citation-font);
   text-align:center;
   line-height: 1.8;
   margin: 2rem 0;

@@ -323,7 +323,7 @@ onMounted(async () => {
 .quote-text {
   font-size: 1.5rem;
   font-style: italic;
-  font-family: garamond, serif;
+  font-family: var(--citation-font);
   line-height: 1.8;
   margin: 2rem 0;
   margin-top:3rem;
@@ -440,7 +440,7 @@ ion-fab-button.rating {
 }
 
 .stars ion-icon.active {
-  color: #FFD700;
+  color: var(--mcdj-gold-500);
 }
 
 .text-center {

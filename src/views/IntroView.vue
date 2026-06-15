@@ -184,7 +184,7 @@ onIonViewWillEnter(async () => {
 .slide-text {
   font-size: 1.4rem;
   font-style: italic;
-  font-family: garamond, serif;
+  font-family: var(--citation-font);
   line-height: 1.8;
   margin: 2rem 0;
   color: var(--ion-text-color);

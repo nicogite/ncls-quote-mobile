@@ -34,7 +34,8 @@ import '@ionic/vue/css/display.css';
 
 /* @import '@ionic/vue/css/palettes/dark.always.css'; */
 /* @import '@ionic/vue/css/palettes/dark.class.css'; */
-import '@ionic/vue/css/palettes/dark.system.css';
+/* Mode sombre désactivé : le design "editorial light" suit le backoffice (clair uniquement). */
+/* import '@ionic/vue/css/palettes/dark.system.css'; */
 
 /* Theme variables */
 import './theme/variables.css';

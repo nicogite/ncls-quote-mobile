@@ -110,6 +110,13 @@ ion-app ion-content {
   background-size: cover;
 }
 
+/* Titres de barre d'outils en serif éditorial (masthead façon backoffice) */
+ion-title {
+  font-family: var(--citation-font);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
 #background-content {
   --background: none;
 }

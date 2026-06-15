@@ -225,12 +225,12 @@ onMounted(async () => {
 }
 
 .stars ion-icon.active {
-  color: #FFD700;
+  color: var(--mcdj-gold-500);
   transform: scale(1.1);
 }
 
 .stars ion-icon.hover {
-  color: #FFD700;
+  color: var(--mcdj-gold-500);
   opacity: 0.7;
 }
 
