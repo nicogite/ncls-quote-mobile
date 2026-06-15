@@ -41,6 +41,13 @@
       </div>
       
       <ion-fab vertical="bottom" horizontal="start" slot="fixed" @click.stop>
+        <ion-fab-button
+          v-if="interpretation"
+          class="ion-margin-bottom quote-action-button"
+          @click="goToInterpretation"
+        >
+          <ion-icon :icon="sparklesOutline" size="large" />
+        </ion-fab-button>
         <ion-fab-button id="ratingButton" class="ion-margin-bottom quote-action-button" :class="{ rating: quotationRated }" @click="toggleLike">
           <ion-icon v-if="!quotationRated" :icon="starOutline" size="large" />
           <div class="stars" v-else>
@@ -79,7 +86,7 @@ import {
   IonFabButton,
   toastController
 } from '@ionic/vue'
-import { star, starOutline, shareSocial } from 'ionicons/icons'
+import { star, starOutline, shareSocial, sparklesOutline } from 'ionicons/icons'
 import { Share } from '@capacitor/share'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -96,6 +103,7 @@ const quote = ref('')
 const quoteId = ref('')
 const author = ref('')
 const wiki_link = ref('')
+const interpretation = ref('')
 const viewedAt = ref<Date | null>(null)
 const quotationRated = ref(false)
 const rating = ref(0)
@@ -151,6 +159,10 @@ function getTodayFormatted(): string {
 
 function toggleLike() {
   quotationRated.value = true
+}
+
+function goToInterpretation() {
+  router.push('/tabs/interpretation')
 }
 
 function handleContentClick() {
@@ -223,6 +235,7 @@ onMounted(async () => {
       quote.value = quoteStore.currentQuote.text
       author.value = quoteStore.currentQuote.author
       wiki_link.value = quoteStore.currentQuote.wiki_link || ''
+      interpretation.value = quoteStore.currentQuote.interpretation || ''
       nbQuotes.value = quoteStore.currentQuote.nb_quotes || 0
       if (quoteStore.currentQuote.viewed_at) {
         viewedAt.value = new Date(quoteStore.currentQuote.viewed_at)
@@ -242,6 +255,7 @@ onMounted(async () => {
         quote.value = response.data.text
         author.value = response.data.author || 'Inconnu'
         wiki_link.value = response.data.wiki_link || ''
+        interpretation.value = response.data.interpretation || ''
         nbQuotes.value = response.data.nb_quotes || 0
         if (response.data.viewed_at) {
           viewedAt.value = new Date(response.data.viewed_at)
@@ -253,6 +267,7 @@ onMounted(async () => {
           text: response.data.text,
           author: response.data.author || 'Inconnu',
           wiki_link: response.data.wiki_link || '',
+          interpretation: response.data.interpretation || '',
           viewed_at: response.data.viewed_at,
           nb_quotes: response.data.nb_quotes
         })

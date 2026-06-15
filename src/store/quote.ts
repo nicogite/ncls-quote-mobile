@@ -9,6 +9,7 @@ export interface Quote {
   rating?: number
   created_at?: string
   wiki_link?: string
+  interpretation?: string
   viewed_at?: string
   nb_quotes?: number
 }

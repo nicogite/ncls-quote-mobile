@@ -22,6 +22,7 @@
             Mentions légales
           </ion-nav-link>
         </ion-menu-toggle>
+        <div class="menu-separator"></div>
         <ion-menu-toggle>
           <ion-nav-link @click="simulateFirstLaunch" class="menu-item">
             Simuler premier lancement
@@ -193,6 +194,12 @@ async function testNotification() {
 
 .menu-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.menu-separator {
+  height: 1px;
+  background-color: var(--ion-color-step-150, #e0e0e0);
+  margin: 6px 10px;
 }
 
 </style>

@@ -15,6 +15,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '', redirect: 'welcome' },
       { path: 'welcome', component: () => import('@/views/WelcomeView.vue') },
       { path: 'quote', component: () => import('@/views/QuoteView.vue') },
+      { path: 'interpretation', component: () => import('@/views/InterpretationView.vue') },
       { path: 'a-demain', component: () => import('@/views/AdemainView.vue') },
       { path: 'concept', component: () => import('@/views/ConceptView.vue') },
       { path: 'contact', component: () => import('@/views/ContactView.vue')  },
