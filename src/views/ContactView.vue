@@ -2,17 +2,23 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Contact</ion-title>
+        <ion-title>Nous contacter</ion-title>
+        <ion-buttons slot="end">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <div class="ion-padding">
-        <form @submit.prevent="handleSubmit">
-          <ion-item>
-            <ion-label position="floating">Votre email</ion-label>
-            <ion-input v-model="email" type="email" required />
-          </ion-item>
+        <ion-text>
+          <p class="intro">
+            Une question, une suggestion, une citation à proposer ?
+            Écrivez-nous votre message, votre application mail s'ouvrira
+            pour finaliser l'envoi.
+          </p>
+        </ion-text>
 
+        <form @submit.prevent="handleSubmit">
           <ion-item>
             <ion-label position="floating">Votre message</ion-label>
             <ion-textarea
@@ -23,11 +29,11 @@
           </ion-item>
 
           <ion-button expand="block" type="submit" class="ion-margin-top">
-            Envoyer
+            Ouvrir mon application mail
           </ion-button>
         </form>
 
-        <ion-text v-if="info" color="success" class="ion-text-center">
+        <ion-text v-if="info" :color="infoColor" class="ion-text-center">
           <p>{{ info }}</p>
         </ion-text>
       </div>
@@ -44,36 +50,67 @@ import {
   IonContent,
   IonItem,
   IonLabel,
-  IonInput,
   IonTextarea,
   IonButton,
-  IonText
+  IonText,
+  IonButtons,
+  IonMenuButton
 } from '@ionic/vue'
 import { ref } from 'vue'
-import axios from '@/services/api'
+import { Capacitor } from '@capacitor/core'
+import { EmailComposer } from 'capacitor-email-composer'
 
-const email = ref('')
+const CONTACT_EMAIL = 'michael@copsidas.com'
+const SUBJECT = 'Ma Citation du Jour — Contact'
+
 const message = ref('')
 const info = ref('')
+const infoColor = ref('success')
 
 async function handleSubmit() {
+  info.value = ''
+  const body = message.value.trim()
+
   try {
-    await axios.post('/api/contact', {
-      email: email.value,
-      message: message.value,
-    })
-    info.value = "Message envoyé !"
-    email.value = ''
+    if (Capacitor.isNativePlatform()) {
+      await EmailComposer.open({
+        to: [CONTACT_EMAIL],
+        subject: SUBJECT,
+        body,
+        isHtml: false,
+      })
+    } else {
+      // Repli web : ouvre le client mail via mailto:
+      const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(SUBJECT)}&body=${encodeURIComponent(body)}`
+      window.open(mailto, '_blank')
+    }
+    infoColor.value = 'success'
+    info.value = 'Votre application mail va s\'ouvrir.'
     message.value = ''
   } catch (e) {
-    console.log(e)
-    info.value = "Erreur lors de l'envoi du message."
+    console.error('Email composer error:', e)
+    infoColor.value = 'danger'
+    info.value = "Impossible d'ouvrir l'application mail. Écrivez-nous à " + CONTACT_EMAIL
   }
 }
 </script>
 
 <style scoped>
+.intro {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
 ion-item {
   margin-bottom: 1rem;
+  --background: #ffffff;
+  --color: var(--ion-text-color);
+  --border-radius: 8px;
+}
+
+ion-textarea {
+  --color: var(--ion-text-color);
+  --placeholder-color: var(--ion-text-color);
+  --placeholder-opacity: 0.5;
 }
 </style>

@@ -13,6 +13,11 @@
           </ion-nav-link>
         </ion-menu-toggle>
         <ion-menu-toggle>
+          <ion-nav-link @click="goToContact" class="menu-item">
+            Nous contacter
+          </ion-nav-link>
+        </ion-menu-toggle>
+        <ion-menu-toggle>
           <ion-nav-link @click="goToLegal" class="menu-item">
             Mentions légales
           </ion-nav-link>
@@ -99,6 +104,10 @@ const isOnQuoteOrWelcome = computed(() => {
 
 function goToConcept() {
   router.push('/tabs/intro')
+}
+
+function goToContact() {
+  router.push('/tabs/contact')
 }
 
 function goToLegal() {

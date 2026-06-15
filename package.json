@@ -27,6 +27,7 @@
     "@ionic/vue": "^8.0.0",
     "@ionic/vue-router": "^8.0.0",
     "axios": "^1.13.2",
+    "capacitor-email-composer": "^8.0.0",
     "ionicons": "^7.0.0",
     "pinia": "^2.1.7",
     "swiper": "^12.2.0",

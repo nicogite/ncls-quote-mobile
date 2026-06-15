@@ -9,7 +9,9 @@
 		"KeyboardPlugin",
 		"LocalNotificationsPlugin",
 		"PreferencesPlugin",
+		"PushNotificationsPlugin",
 		"SharePlugin",
-		"StatusBarPlugin"
+		"StatusBarPlugin",
+		"EmailComposerPlugin"
 	]
 }
