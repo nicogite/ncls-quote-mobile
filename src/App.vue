@@ -2,7 +2,7 @@
   <ion-app>
     <div v-if="isBootstrapping" class="app-splash-screen">
       <div class="app-splash-content">
-        <img src="/img/Splash-screen.png" class="app-splash-logo" />
+        <img src="/img/splash-screen.jpg" class="app-splash-logo" />
       </div>
     </div>
     <ion-router-outlet v-show="!isBootstrapping" />

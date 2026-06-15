@@ -20,9 +20,9 @@
 
         <form @submit.prevent="handleSubmit">
           <ion-item>
-            <ion-label position="floating">Votre message</ion-label>
             <ion-textarea
               v-model="message"
+              placeholder="Votre message"
               :rows="8"
               required
             />

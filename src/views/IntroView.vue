@@ -35,7 +35,7 @@ import { ref, computed, onMounted } from 'vue';
 import { ensureContentLoaded, getContentValue } from '@/services/contentService';
 
 const ionRouter = useIonRouter();
-const slidesContent = ref<string[]>(['', '', '', '']);
+const slidesContent = ref<string[]>(['', '', '', '', '']);
 const slidesCount = slidesContent.value.length;
 
 // Index de la slide actuellement affichée par la couche de contenu
@@ -118,6 +118,7 @@ onIonViewWillEnter(async () => {
     getContentValue('intro_2'),
     getContentValue('intro_3'),
     getContentValue('intro_4'),
+    getContentValue('intro_5'),
   ];
 });
 </script>
