@@ -29,7 +29,7 @@
           </ion-item>
 
           <ion-button expand="block" type="submit" class="ion-margin-top">
-            Ouvrir mon application mail
+            Envoyer par mail
           </ion-button>
         </form>
 

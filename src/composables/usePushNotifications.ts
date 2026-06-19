@@ -17,30 +17,49 @@ export function usePushNotifications() {
 
   const { getNotificationSettings, cancelNotifications } = useNotifications();
 
-  /** Attend le token FCM délivré par l'OS après PushNotifications.register(). */
-  const waitForRegistrationToken = (): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const listeners: Array<() => void> = [];
-      const finish = (done: () => void) => {
-        clearTimeout(timer);
-        listeners.forEach((remove) => remove());
-        done();
-      };
-      const timer = setTimeout(
-        () => finish(() => reject(new Error("Délai d'enregistrement push dépassé"))),
-        15000
-      );
+  /**
+   * Attend le token FCM délivré par l'OS après PushNotifications.register().
+   *
+   * Les écouteurs sont attachés AVANT register() : lors d'un ré-enregistrement
+   * (après une désactivation), FCM renvoie le token en cache quasi
+   * instantanément et l'événement 'registration' peut survenir avant que
+   * l'écouteur ne soit attaché — il serait alors perdu, provoquant un timeout
+   * et l'impossibilité de réactiver les notifications.
+   */
+  const waitForRegistrationToken = async (): Promise<string> => {
+    const handles: Array<{ remove: () => Promise<void> }> = [];
+    const cleanup = () => handles.forEach((handle) => handle.remove());
 
-      PushNotifications.addListener('registration', (token) => {
-        finish(() => resolve(token.value));
-      }).then((handle) => listeners.push(() => handle.remove()));
+    try {
+      return await new Promise<string>((resolve, reject) => {
+        const timer = setTimeout(
+          () => reject(new Error("Délai d'enregistrement push dépassé")),
+          15000
+        );
 
-      PushNotifications.addListener('registrationError', (err) => {
-        finish(() => reject(new Error(err.error)));
-      }).then((handle) => listeners.push(() => handle.remove()));
-
-      PushNotifications.register().catch((err) => finish(() => reject(err)));
-    });
+        Promise.all([
+          PushNotifications.addListener('registration', (token) => {
+            clearTimeout(timer);
+            resolve(token.value);
+          }),
+          PushNotifications.addListener('registrationError', (err) => {
+            clearTimeout(timer);
+            reject(new Error(err.error));
+          }),
+        ])
+          .then((added) => {
+            handles.push(...added);
+            // Écouteurs attachés : on peut déclencher l'enregistrement.
+            return PushNotifications.register();
+          })
+          .catch((err) => {
+            clearTimeout(timer);
+            reject(err);
+          });
+      });
+    } finally {
+      cleanup();
+    }
   };
 
   /**

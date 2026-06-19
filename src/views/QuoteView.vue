@@ -41,30 +41,30 @@
       </div>
       
       <ion-fab vertical="bottom" horizontal="start" slot="fixed" @click.stop>
+        <ion-fab-button id="ratingButton" class="ion-margin-bottom quote-action-button" :class="{ rating: quotationRated }" @click="toggleLike">
+          <ion-icon v-if="!quotationRated" :icon="starOutline" size="large" />
+          <div class="stars" v-else>
+            <ion-icon
+            v-for="starNum in 5"
+            :key="starNum"
+            :icon="starNum <= rating ? star : starOutline"
+            :class="{ active: starNum <= rating, hover: starNum <= hoverRating }"
+            @click="setRating(starNum)"
+            @mouseenter="hoverRating = starNum"
+            @mouseleave="hoverRating = 0"
+            size="large"
+            />
+          </div>
+        </ion-fab-button>
+        <ion-fab-button  class="ion-margin-bottom quote-action-button" @click="shareQuote">
+          <ion-icon :icon="shareSocial" size="large" />
+        </ion-fab-button>
         <ion-fab-button
           v-if="interpretation"
           class="ion-margin-bottom quote-action-button"
           @click="goToInterpretation"
         >
           <img src="/img/icon-IA.jpg" alt="Interprétation IA" class="ia-icon" />
-        </ion-fab-button>
-        <ion-fab-button id="ratingButton" class="ion-margin-bottom quote-action-button" :class="{ rating: quotationRated }" @click="toggleLike">
-          <ion-icon v-if="!quotationRated" :icon="starOutline" size="large" />
-          <div class="stars" v-else>
-            <ion-icon
-              v-for="starNum in 5"
-              :key="starNum"
-              :icon="starNum <= rating ? star : starOutline"
-              :class="{ active: starNum <= rating, hover: starNum <= hoverRating }"
-              @click="setRating(starNum)"
-              @mouseenter="hoverRating = starNum"
-              @mouseleave="hoverRating = 0"
-              size="large"
-            />
-          </div>
-        </ion-fab-button>
-        <ion-fab-button  class="ion-margin-bottom quote-action-button" @click="shareQuote">
-          <ion-icon :icon="shareSocial" size="large" />
         </ion-fab-button>
       </ion-fab>
     </ion-content>
