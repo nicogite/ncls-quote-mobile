@@ -1,0 +1,15 @@
+node_modules
+dist
+.git
+.github
+android
+ios
+tests
+cypress
+cypress.config.ts
+.vscode
+Dockerfile
+.dockerignore
+*.md
+.logs.txt
+netlify.toml
