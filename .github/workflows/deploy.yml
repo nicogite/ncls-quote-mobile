@@ -39,22 +39,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+
   deploy:
     name: Déploiement sur le VPS
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Pull & redémarrage via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Préparer la clé SSH
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+      - name: Pull & redémarrage via SSH (avec retry)
+        uses: nick-fields/retry@v3
         with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -e
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            cd /opt/stack/citation
-            docker compose pull
-            docker compose up -d
-            docker image prune -f
-            docker logout ghcr.io
+          timeout_minutes: 6
+          max_attempts: 4
+          retry_wait_seconds: 25
+          command: >-
+            ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o ConnectTimeout=25
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}
+            'echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin && cd /opt/stack/citation && docker compose pull && docker compose up -d --remove-orphans && docker image prune -f && docker logout ghcr.io'
