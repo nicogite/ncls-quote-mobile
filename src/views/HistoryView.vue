@@ -48,6 +48,13 @@
               </div>
               
               <p class="viewed-date">{{ formatDate(item.viewed_at) }}</p>
+              <img
+                v-if="item.interpretation"
+                src="/img/icon-IA.jpg"
+                alt="Interprétation IA"
+                class="interpretation-icon"
+                @click="goToInterpretation(item)"
+              />
               <ion-icon
                 :icon="shareSocial"
                 class="share-icon"
@@ -88,14 +95,18 @@ import {
 } from '@ionic/vue'
 import { star, starOutline, bookOutline, shareSocial } from 'ionicons/icons'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from '@/services/api'
 import { initializeUser } from '@/services/deviceService'
+import { useQuoteStore } from '@/store/quote'
 import { Share } from '@capacitor/share'
 
 interface HistoryItem {
   quote_id: number
   quote_text: string
   quote_author: string
+  wiki_link?: string
+  interpretation?: string
   rating: number
   viewed_at: string
 }
@@ -103,6 +114,23 @@ interface HistoryItem {
 const loading = ref(true)
 const history = ref<HistoryItem[]>([])
 const hoverRatings = ref<Record<number, number>>({})
+
+const router = useRouter()
+const quoteStore = useQuoteStore()
+
+// Charge la citation de l'historique dans le store puis ouvre son interprétation.
+function goToInterpretation(item: HistoryItem) {
+  quoteStore.setQuote({
+    id: item.quote_id,
+    text: item.quote_text,
+    author: item.quote_author || 'Inconnu',
+    wiki_link: item.wiki_link || '',
+    interpretation: item.interpretation || '',
+    rating: item.rating,
+    viewed_at: item.viewed_at,
+  })
+  router.push({ path: '/tabs/interpretation', query: { from: 'history' } })
+}
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
@@ -114,7 +142,7 @@ function formatDate(dateString: string): string {
   const hours = date.getHours().toString().padStart(2, '0')
   const minutes = date.getMinutes().toString().padStart(2, '0')
   
-  return `Vu le ${dayName} ${day} ${month} ${year} à ${hours}h${minutes}`
+  return `${dayName} ${day} ${month} ${year} à ${hours}h${minutes}`
 }
 
 async function shareAll() {
@@ -315,6 +343,29 @@ onIonViewWillEnter(() => {
 }
 
 .share-icon:active {
+  transform: scale(0.95);
+}
+
+/* Bouton d'interprétation, placé juste à gauche du bouton de partage */
+.interpretation-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 52px;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.interpretation-icon:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.interpretation-icon:active {
   transform: scale(0.95);
 }
 

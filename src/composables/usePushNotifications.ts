@@ -15,7 +15,8 @@ import { useNotifications } from './useNotifications';
  */
 export function usePushNotifications() {
 
-  const { getNotificationSettings, cancelNotifications } = useNotifications();
+  const { getNotificationSettings, saveNotificationSettings, cancelNotifications } =
+    useNotifications();
 
   /**
    * Attend le token FCM délivré par l'OS après PushNotifications.register().
@@ -120,9 +121,14 @@ export function usePushNotifications() {
 
   /**
    * Au démarrage de l'app : purge l'ancienne notification locale planifiée
-   * (versions précédentes de l'app), puis ré-enregistre le token auprès du
-   * serveur si l'utilisateur a activé les notifications — le token FCM peut
-   * changer (mise à jour, restauration), le serveur doit avoir le dernier.
+   * (versions précédentes de l'app), puis :
+   *  - si l'utilisateur a déjà un réglage, ré-enregistre le token auprès du
+   *    serveur quand les notifications sont activées — le token FCM peut
+   *    changer (mise à jour, restauration), le serveur doit avoir le dernier ;
+   *  - au tout premier lancement (aucun réglage), les notifications sont
+   *    activées par défaut en quotidien : on demande la permission et on
+   *    enregistre. L'état réellement obtenu (accordé/refusé) est persisté pour
+   *    ne pas redemander la permission à chaque lancement.
    */
   const restorePushRegistration = async (): Promise<void> => {
     if (!Capacitor.isNativePlatform()) return;
@@ -134,9 +140,16 @@ export function usePushNotifications() {
     }
 
     const settings = await getNotificationSettings();
-    if (settings && settings.enabled) {
-      await enablePush(settings.frequency);
+    if (settings) {
+      if (settings.enabled) {
+        await enablePush(settings.frequency);
+      }
+      return;
     }
+
+    // Premier lancement : opt-in par défaut (quotidien).
+    const enabled = await enablePush('daily');
+    await saveNotificationSettings({ enabled, frequency: 'daily' });
   };
 
   return {

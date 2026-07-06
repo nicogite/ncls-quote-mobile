@@ -18,7 +18,7 @@
 
         <!-- Citation -->
         <div class="quote-container" :class="{ ready: isQuoteReady }">
-          <div class="quote-date">Citation générée <b>pour vous</b> parmi {{ nbQuotes }} citations<br>{{ currentDateFrench }}</div>
+          <!--div class="quote-date">Générée <b>pour vous</b> parmi {{ nbQuotes }} citations<br>{{ currentDateFrench }}</div-->
           <div class="quote-text">
             “{{ quote }}”
           </div>
@@ -28,6 +28,7 @@
               <img src="/img/Wiki.png" alt="Wikipedia" class="wiki-icon" />
             </a>
           </div>
+          <p class="quote-date">Générée <b>pour vous</b> parmi {{ nbQuotes }} citations<br>{{ currentDateFrench }}</p>
           <div class="quote-comment">
             <p
               v-for="(paragraph, index) in commentParagraphs"
@@ -314,9 +315,10 @@ onMounted(async () => {
 }
 
 .quote-date {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: var(--ion-text-color-step-250);
   margin-bottom: 1.5rem;
+  margin-top: 2.5rem;
   /*text-transform: lowercase;*/
 }
 
@@ -324,9 +326,9 @@ onMounted(async () => {
   font-size: 1.5rem;
   font-style: italic;
   font-family: garamond, serif;
-  line-height: 1.8;
+  line-height: 1.5;
   margin: 2rem 0;
-  margin-top:3rem;
+  margin-top:1rem;
   color: var(--ion-text-color);
   position: relative;
   display: flex;

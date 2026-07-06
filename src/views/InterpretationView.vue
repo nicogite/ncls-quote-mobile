@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/tabs/quote" text="" />
+          <ion-back-button :default-href="backHref" text="" />
         </ion-buttons>
         <ion-title>Interprétation</ion-title>
         <ion-buttons slot="end">
@@ -25,7 +25,7 @@
           </div>
 
           <div class="interpretation-divider"></div>
-
+          <p>Interprétation par l'IA Anthropic :</p>
           <div
             v-if="interpretation"
             class="interpretation-body"
@@ -52,9 +52,16 @@ import {
   IonBackButton,
 } from '@ionic/vue'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useQuoteStore } from '@/store/quote'
 
 const quoteStore = useQuoteStore()
+const route = useRoute()
+
+// Destination du bouton retour : l'historique si on en vient, sinon la citation.
+const backHref = computed(() =>
+  route.query.from === 'history' ? '/tabs/history' : '/tabs/quote'
+)
 
 const quote = computed(() => quoteStore.currentQuote.text)
 const author = computed(() => quoteStore.currentQuote.author || 'Inconnu')
@@ -73,7 +80,7 @@ const interpretation = computed(() => quoteStore.currentQuote.interpretation || 
   font-size: 1.5rem;
   font-style: italic;
   font-family: garamond, serif;
-  line-height: 1.8;
+  line-height: 1.5;
   margin: 2rem 0;
   margin-top: 1rem;
   color: var(--ion-text-color);

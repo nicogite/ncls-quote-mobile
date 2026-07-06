@@ -11,19 +11,26 @@
 
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Preferences } from '@capacitor/preferences';
+import { App as CapacitorApp } from '@capacitor/app';
+import type { PluginListenerHandle } from '@capacitor/core';
 import { initializeUser } from '@/services/deviceService';
 import { ensureContentLoaded } from '@/services/contentService';
 import axios from '@/services/api';
 import { useQuoteStore } from '@/store/quote';
 import { usePushNotifications } from '@/composables/usePushNotifications';
+import { useBadge } from '@/composables/useBadge';
 
 const isBootstrapping = ref(true)
 const MIN_SPLASH_DURATION_MS = 5000
 const router = useRouter()
 const { restorePushRegistration } = usePushNotifications();
+const { clearBadge } = useBadge();
+
+// Efface la pastille de l'icône quand l'app revient au premier plan.
+let appStateListener: PluginListenerHandle | null = null
 
 // Précharger la texture de fond pour les autres pages
 function preloadTexture(): Promise<void> {
@@ -56,6 +63,13 @@ onMounted(async () => {
     // Ré-enregistrer le token push auprès du serveur (et purger l'ancienne
     // notification locale planifiée par les versions précédentes)
     await restorePushRegistration();
+
+    // Effacer la pastille au démarrage (l'utilisateur ouvre l'app), puis à
+    // chaque retour au premier plan.
+    await clearBadge();
+    appStateListener = await CapacitorApp.addListener('appStateChange', ({ isActive }) => {
+      if (isActive) clearBadge();
+    });
 
     // Vérifier si c'est le premier lancement
     const { value: firstLaunch } = await Preferences.get({ key: 'first_launch' });
@@ -100,6 +114,10 @@ onMounted(async () => {
   } finally {
     isBootstrapping.value = false
   }
+});
+
+onUnmounted(() => {
+  appStateListener?.remove()
 });
 </script>
 
