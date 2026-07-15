@@ -9,9 +9,10 @@ export interface NotificationSettings {
 const NOTIFICATION_SETTINGS_KEY = 'notification_settings';
 
 /**
- * Notifications locales : ne sert plus qu'au bouton de test (5 s) et au
- * stockage des préférences. La notification quotidienne/hebdomadaire est
- * désormais un push FCM envoyé par le serveur — voir usePushNotifications.
+ * Notifications locales : ne sert plus qu'au stockage des préférences et à
+ * l'annulation de l'ancienne notification locale. La notification
+ * quotidienne/hebdomadaire est désormais un push FCM envoyé par le serveur
+ * — voir usePushNotifications.
  */
 export function useNotifications() {
 
@@ -53,30 +54,8 @@ export function useNotifications() {
     await LocalNotifications.cancel({ notifications: [{ id: NOTIFICATION_ID }] });
   };
 
-  /** Notification de test, déclenchée 5 secondes plus tard (debug). */
-  const scheduleSimpleNotification = async () => {
-    const granted = await ensurePermission();
-    if (!granted) {
-      console.warn('Permission de notification refusée.');
-      return;
-    }
-    try {
-      await LocalNotifications.schedule({
-        notifications: [{
-          id: NOTIFICATION_ID,
-          title: 'Ma citation du jour',
-          body: 'Votre citation du jour vous attend !',
-          schedule: { at: new Date(Date.now() + 5000) },
-        }],
-      });
-    } catch (error) {
-      console.error('Erreur lors de la programmation de la notification de test :', error);
-    }
-  };
-
   return {
     ensurePermission,
-    scheduleSimpleNotification,
     saveNotificationSettings,
     getNotificationSettings,
     cancelNotifications,
