@@ -158,7 +158,7 @@ onIonViewWillEnter(async () => {
 }
 
 .reveal-quote-button {
-  margin-top: 3rem;
+  margin-top: 0.5rem;
   font-size: 1rem;
   text-align: center;
   cursor: pointer;

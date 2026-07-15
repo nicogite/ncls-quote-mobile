@@ -38,7 +38,7 @@ function preloadTexture(): Promise<void> {
     const img = new Image()
     img.onload = () => resolve()
     img.onerror = () => resolve() // Résoudre même en cas d'erreur pour ne pas bloquer l'app
-    img.src = '/img/paper-bgd-2.jpg'
+    img.src = '/img/paper-bgd-2.png'
   })
 }
 
@@ -124,7 +124,7 @@ onUnmounted(() => {
 <style>
 
 ion-app ion-content {
-  --background: url('/img/paper-bgd-2.jpg') center/cover no-repeat;
+  --background: url('/img/paper-bgd-2.png') center/cover no-repeat;
   background-size: cover;
 }
 
