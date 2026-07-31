@@ -125,7 +125,7 @@ onIonViewWillEnter(async () => {
   animation-timing-function: ease;
   animation-delay: calc(var(--stagger-index, 0) * 0.3s);
   margin-bottom: 1rem;
-  
+
 }
 
 .quote-button {

@@ -9,8 +9,8 @@
       <div class="intro-slider">
         <!-- Couche de contenu : gère le fondu en 3 temps (fadeOut → vide → fadeIn) -->
         <div class="slide-overlay" :class="phase">
-          <div class="ion-padding">
-            <div class="slide-container">
+          <div ref="viewportRef" class="slide-viewport">
+            <div ref="containerRef" class="slide-container">
               <div class="slide-text" v-html="displayContent"></div>
               <ion-button
                 v-if="displayIndex === slidesCount - 1"
@@ -30,8 +30,8 @@
   </ion-page>
 </template>
 <script setup lang="ts">
-import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonButton, onIonViewWillEnter, useIonRouter } from '@ionic/vue';
-import { ref, computed, onMounted } from 'vue';
+import { IonContent, IonPage, IonHeader, IonToolbar, IonTitle, IonButton, onIonViewWillEnter, onIonViewDidEnter, useIonRouter } from '@ionic/vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { ensureContentLoaded, getContentValue } from '@/services/contentService';
 
 const ionRouter = useIonRouter();
@@ -48,6 +48,36 @@ let animating = false;
 
 // Référence vers le web component <swiper-container>
 const swiperRef = ref<(HTMLElement & { initialize: () => void; swiper: any }) | null>(null);
+
+// Auto-ajustement : sur les écrans étroits/courts, on réduit la taille du texte
+// jusqu'à ce que la slide tienne entièrement dans la zone visible (pas de scroll
+// possible ici, la couche de contenu laisse passer les gestes au Swiper).
+const viewportRef = ref<HTMLElement | null>(null);
+const containerRef = ref<HTMLElement | null>(null);
+const MIN_FIT_SCALE = 0.55;
+const FIT_STEP = 0.04;
+
+const fitContent = () => {
+  const viewport = viewportRef.value;
+  const container = containerRef.value;
+  if (!viewport || !container) return;
+
+  let scale = 1;
+  container.style.setProperty('--fit-scale', '1');
+
+  const available = viewport.clientHeight;
+  if (available <= 0) return; // page pas encore mesurable (masquée / en transition)
+
+  // La lecture de scrollHeight force un reflow : la boucle voit bien chaque palier.
+  while (scale > MIN_FIT_SCALE && container.scrollHeight > available) {
+    scale = Math.max(MIN_FIT_SCALE, scale - FIT_STEP);
+    container.style.setProperty('--fit-scale', String(scale));
+  }
+};
+
+// Le contenu est échangé pendant la phase « blank » : on réajuste à ce moment-là,
+// donc invisible pour l'utilisateur.
+watch(displayContent, fitContent, { flush: 'post' });
 
 // Durées (ms) — doivent rester synchronisées avec la transition CSS
 const FADE = 1000;
@@ -109,7 +139,18 @@ onMounted(() => {
   phase.value = 'blank';
   requestAnimationFrame(() => { phase.value = 'fade-in'; });
   setTimeout(() => { if (!animating) phase.value = ''; }, FADE);
+
+  window.addEventListener('resize', fitContent);
+  window.addEventListener('orientationchange', fitContent);
 });
+
+onUnmounted(() => {
+  window.removeEventListener('resize', fitContent);
+  window.removeEventListener('orientationchange', fitContent);
+});
+
+// À l'entrée dans la vue, les dimensions réelles sont connues : on (re)mesure.
+onIonViewDidEnter(fitContent);
 
 onIonViewWillEnter(async () => {
   await ensureContentLoaded();
@@ -152,13 +193,22 @@ onIonViewWillEnter(async () => {
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 80px; /* Espace pour la pagination */
+  flex-direction: column;
+  /* Espace pour la pagination, réduit sur les écrans courts */
+  padding-bottom: clamp(52px, 10vh, 80px);
   z-index: 2;
   pointer-events: none;
   opacity: 1;
   transition: opacity 1s ease-in-out;
+}
+
+/* Zone utile bornée : c'est la hauteur de référence de l'auto-ajustement */
+.slide-viewport {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slide-overlay.fade-out {
@@ -176,27 +226,35 @@ onIonViewWillEnter(async () => {
 
 .slide-container {
   max-width: 600px;
-  margin: 2rem auto;
+  width: 100%;
   text-align: center;
-  padding: 40px;
+  /* Sur écran étroit, on récupère de la largeur pour gagner des lignes */
+  padding: clamp(14px, 4vw, 40px);
+  /* Taille de référence, mise à l'échelle par fitContent() si besoin */
+  font-size: calc(1.4rem * var(--fit-scale, 1));
 }
 
 .slide-text {
-  font-size: 1.4rem;
+  font-size: 1em; /* suit l'échelle du conteneur */
   font-style: italic;
   font-family: garamond, serif;
   line-height: 1.8;
-  margin: 2rem 0;
+  margin: clamp(0.5rem, 2vh, 2rem) 0;
   color: var(--ion-text-color);
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.5rem;
+  gap: clamp(0.5em, 2.5vh, 1.6em);
+}
+
+/* Contenu injecté (v-html) : l'espacement vertical est porté par le gap */
+.slide-text :deep(p) {
+  margin: 0;
 }
 
 .reveal-quote-button {
-  margin-top: 3rem;
+  margin-top: clamp(1rem, 4vh, 3rem);
   font-size: 1rem;
   text-align: center;
   cursor: pointer;
@@ -204,5 +262,13 @@ onIonViewWillEnter(async () => {
   font-weight: bold;
   --background: var(--ion-color-primary);
   pointer-events: auto; /* le bouton reste cliquable malgré l'overlay transparent au geste */
+}
+
+/* Écrans très étroits : interlignage et espacements resserrés */
+@media (max-width: 410px) {
+  .slide-text {
+    line-height: 1.55;
+    gap: 0.45em;
+  }
 }
 </style>
